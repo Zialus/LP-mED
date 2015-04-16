@@ -1,68 +1,91 @@
 import java.util.LinkedList;
 
-
 public class Buffer {
 
 	LinkedList<StringBuilder> LineList = new LinkedList<StringBuilder>();
-	Position currentCursor;
-	
+	Cursor currentCursor;
+
 	//Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
 		LineList.add(vazia);
-		currentCursor = new Position(0,0);
+		currentCursor = new Cursor(0,0);
 	}
-	
+
 	//Contruir um buffer já com uma linha
-	public Buffer(StringBuilder linha) {
+	public Buffer(String linhatemp) {
+		StringBuilder linha = new StringBuilder(linhatemp);
 		LineList.add(linha);
 		StringBuilder vazia = new StringBuilder();
 		LineList.add(vazia);
-		currentCursor = new Position(0,0);
+		currentCursor = new Cursor(0,0);
 	}
-	
-	boolean validPosition(Position newCursor){
-		
-		int x = newCursor.getX();
-		int y = newCursor.getY();
-		
-		return( x>=0 && x<LineList.size() && y >= 0 && y<= LineList.get(x).length() );
-	}
-	
 
-	void setCursor(Position newCursor){
-		
-		int x = newCursor.getX();
-		int y = newCursor.getY();
-		
+	//Verificar se a posição do buffer é valida
+	boolean validPosition(Cursor newCursor){
+
+		int l = newCursor.getL();
+		int c = newCursor.getC();
+
+		return( l>=0 && l<LineList.size() && c >= 0 && c<= LineList.get(l).length() );
+	}
+
+	int getNumLines(){
+		return LineList.size();
+	}
+
+	Cursor getCursor(){
+		return currentCursor;
+	}
+
+	void setCursor(Cursor newCursor){
+
+		int l = newCursor.getL();
+		int c = newCursor.getC();
+
 		if ( validPosition(newCursor)){
-			currentCursor.setX(x);
-			currentCursor.setY(y);
+			currentCursor.setL(l);
+			currentCursor.setC(c);
+		}else{
+			System.out.println("Buffer.setCursor - Invalid Position -" + " x : " + l + " y: " + c);
+		}
+	}
+
+	void movePrev() {
+
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+
+		if ( c > 0){
+			currentCursor.setC(c-1);
+		}
+		else if( l > 0){
+			currentCursor = new Cursor(l-1, LineList.get(l-1).length()); 
 		}
 		else{
-			System.out.println("Buffer.setCursor : Invalid Position" + "x :" + x + " y: " + y);
-		}
-	}
-	
-	void movePrev() {
-		
-		int x = currentCursor.getX();
-		int y = currentCursor.getY();
-		
-		if ( currentCursor.getY() > 0){ currentCursor.setY(y-1); }
-		else if( currentCursor.getX() > 0){ currentCursor = new Position(x-1, LineList.get(x-1).length()); }
-		else {
 			System.out.println("Already at the begining");
 		}
-		
-		
-		
-		//LineList.get(x).length()	
-	
+
 	}
-	
+
 	void moveNext(){
 		
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		int len = LineList.get(l).length();
+		
+		if ( c < len ){
+			currentCursor.setC(c+1);
+		}
+		else if( l < getNumLines()){
+			currentCursor = new Cursor(l+1, 0); 
+		}
+		else{
+			System.out.println("Already at the end");
+		}
+
+
 	}
-	
+
 }
