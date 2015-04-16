@@ -20,7 +20,23 @@ public class Buffer {
 		LineList.add(vazia);
 		currentCursor = new Cursor(0,0);
 	}
+	
+	int getNumLines(){
+		return LineList.size();
+	}
 
+	StringBuilder getNthLine(int i){
+		return LineList.get(i);
+	}
+
+	LinkedList<StringBuilder> getAllLines(){
+		return LineList;
+	}
+
+	//--------------------------------------------------------------//
+	//-------------funções para obter e mover o cursor--------------//
+	//--------------------------------------------------------------//
+	
 	//Verificar se a posição do buffer é valida
 	boolean validPosition(Cursor newCursor){
 
@@ -28,10 +44,6 @@ public class Buffer {
 		int c = newCursor.getC();
 
 		return( l>=0 && l<LineList.size() && c >= 0 && c<= LineList.get(l).length() );
-	}
-
-	int getNumLines(){
-		return LineList.size();
 	}
 
 	Cursor getCursor(){
@@ -69,12 +81,12 @@ public class Buffer {
 	}
 
 	void moveNext(){
-		
+
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-		
+
 		int len = LineList.get(l).length();
-		
+
 		if ( c < len ){
 			currentCursor.setC(c+1);
 		}
@@ -91,7 +103,7 @@ public class Buffer {
 	void movePrevLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-		
+
 		if(l>0){
 			currentCursor = new Cursor(l-1, Math.min(c, LineList.get(l-1).length() ));			
 		}
@@ -99,12 +111,11 @@ public class Buffer {
 			System.out.println("Already at the first line of the buffer");
 		}
 	}
-	
-	
+
 	void moveNextLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-		
+
 		if(l<LineList.size()){
 			currentCursor = new Cursor(l+1, Math.min(c, LineList.get(l+1).length() ));			
 		}
