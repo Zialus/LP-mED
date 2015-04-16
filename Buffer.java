@@ -145,4 +145,40 @@ public class Buffer {
 		LineList.set(l, sb1);
 		LineList.add(l+1, sb2);
 	}
+	void insertChar(char c){
+		if(c=='\n'){
+			insertLn();
+		}
+		else{
+			insertStr(Character.toString(c));
+		}
+	}
+	
+	
+	
+	void deleteChar(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		if(c>0){
+			StringBuilder sb = LineList.get(l);
+			sb.deleteCharAt(c);
+			currentCursor = new Cursor(l, c-1);
+		}
+		else if(l>0){
+			deleteLn();
+		}
+		else{
+			System.out.println("Already at the beginning of the buffer");
+		}
+		
+	}
+
+	private void deleteLn() {
+		int l = currentCursor.getL();
+		
+		LineList.remove(l);
+		currentCursor = new Cursor(l-1, LineList.get(l-1).length());
+		
+	}
 }
