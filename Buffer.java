@@ -88,4 +88,28 @@ public class Buffer {
 
 	}
 
+	void movePrevLine(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		if(l>0){
+			currentCursor = new Cursor(l-1, Math.min(c, LineList.get(l-1).length() ));			
+		}
+		else{
+			System.out.println("Already at the first line of the buffer");
+		}
+	}
+	
+	
+	void moveNextLine(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		if(l<LineList.size()){
+			currentCursor = new Cursor(l+1, Math.min(c, LineList.get(l+1).length() ));			
+		}
+		else{
+			System.out.println("Already at the last line of the buffer");
+		}
+	}
 }
