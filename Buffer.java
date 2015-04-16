@@ -123,4 +123,26 @@ public class Buffer {
 			System.out.println("Already at the last line of the buffer");
 		}
 	}
+
+	void insertStr(String linha){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		StringBuilder sb = LineList.get(l);
+		sb.insert(c, linha);
+		currentCursor = new Cursor(l, c+linha.length());
+	}
+	
+	void insertLn(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		StringBuilder sb = LineList.get(l);
+		String st1 = sb.substring(0, c);
+		String st2 = sb.substring(c+1, sb.length());
+		StringBuilder sb1 = new StringBuilder(st1);
+		StringBuilder sb2 = new StringBuilder(st2);
+		LineList.set(l, sb1);
+		LineList.add(l+1, sb2);
+	}
 }
