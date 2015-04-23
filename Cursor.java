@@ -3,9 +3,9 @@ public class Cursor {
 	private int l;
 	private int c;
 
-	public Cursor(int x, int y){
-		this.l = x;
-		this.c = y;
+	public Cursor(int l, int c){
+		this.l = l;
+		this.c = c;
 	}
 
 	public int getL() {
