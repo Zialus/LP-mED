@@ -119,12 +119,15 @@ public class Buffer {
 		}
 	}
 
-	
+
 	//--------------------------------------------------------------//
 	//------------funções para inserir/apagar caracteres------------//
 	//--------------------------------------------------------------//
-	
+
 	void insertStr(String linha){
+
+		if (linha.contains("\n")) { throw new Error("Buffer.insertStr : newline in text"); }
+
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -179,10 +182,10 @@ public class Buffer {
 		StringBuilder sb1 = LineList.get(l);   // guardar o que está na linha corrente
 		StringBuilder sb2 = LineList.get(l-1); // guardar o que está na linha anterior
 		StringBuilder sb3 = sb1.append(sb2);   // juntar as strings
-		
+
 		LineList.remove(l);    // remover a linha corrente da lista
 		LineList.set(l-1,sb3); // colocar string nova(junção das duas) na lista
-		
+
 		currentCursor = new Cursor(l-1, LineList.get(l-1).length()); //actualizar o cursor para a nova posição
 	}
 
