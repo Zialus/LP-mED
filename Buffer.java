@@ -2,14 +2,13 @@ import java.util.LinkedList;
 
 public class Buffer {
 
-	LinkedList<StringBuilder> LineList = new LinkedList<StringBuilder>();
-	Cursor currentCursor;
+	private LinkedList<StringBuilder> LineList = new LinkedList<StringBuilder>();
+	private Cursor currentCursor = new Cursor (0,0);
 
 	//Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
 		LineList.add(vazia);
-		currentCursor = new Cursor(0,0);
 	}
 
 	//Contruir um buffer já com uma linha
@@ -18,18 +17,17 @@ public class Buffer {
 		LineList.add(linha);
 		StringBuilder vazia = new StringBuilder();
 		LineList.add(vazia);
-		currentCursor = new Cursor(0,0);
 	}
 
-	int getNumLines(){
+	public int getNumLines(){
 		return LineList.size();
 	}
 
-	StringBuilder getNthLine(int i){
+	public StringBuilder getNthLine(int i){
 		return LineList.get(i);
 	}
 
-	LinkedList<StringBuilder> getAllLines(){
+	public LinkedList<StringBuilder> getAllLines(){
 		return LineList;
 	}
 
@@ -37,18 +35,18 @@ public class Buffer {
 	//-------------funções para obter e mover o cursor--------------//
 	//--------------------------------------------------------------//
 
-	boolean validPosition(Cursor newCursor){
+	public boolean validPosition(Cursor newCursor){
 		int l = newCursor.getL();
 		int c = newCursor.getC();
 
 		return( l>=0 && l<LineList.size() && c >= 0 && c<= LineList.get(l).length() );
 	}
 
-	Cursor getCursor(){
+	public Cursor getCursor(){
 		return currentCursor;
 	}
 
-	void setCursor(Cursor newCursor){
+	public void setCursor(Cursor newCursor){
 		int l = newCursor.getL();
 		int c = newCursor.getC();
 
@@ -61,7 +59,7 @@ public class Buffer {
 		}
 	}
 
-	void movePrev() {
+	public void movePrev() {
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -77,7 +75,7 @@ public class Buffer {
 
 	}
 
-	void moveNext(){
+	public void moveNext(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -95,7 +93,7 @@ public class Buffer {
 
 	}
 
-	void movePrevLine(){
+	public void movePrevLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -107,7 +105,7 @@ public class Buffer {
 		}
 	}
 
-	void moveNextLine(){
+	public void moveNextLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -124,7 +122,7 @@ public class Buffer {
 	//------------funções para inserir/apagar caracteres------------//
 	//--------------------------------------------------------------//
 
-	void insertStr(String linha){
+	public void insertStr(String linha){
 
 		if (linha.contains("\n")) { throw new Error("Buffer.insertStr : newline in text"); }
 
@@ -136,7 +134,7 @@ public class Buffer {
 		currentCursor = new Cursor(l, c+linha.length());
 	}
 
-	void insertLn(){
+	public void insertLn(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
@@ -149,7 +147,7 @@ public class Buffer {
 		LineList.add(l+1, sb2);
 	}
 
-	void insertChar(char c){
+	public void insertChar(char c){
 		if(c=='\n'){
 			insertLn();
 		}
@@ -158,7 +156,7 @@ public class Buffer {
 		}
 	}
 
-	void deleteChar(){
+	public void deleteChar(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
