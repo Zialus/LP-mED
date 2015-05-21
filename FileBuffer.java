@@ -1,11 +1,11 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 public class FileBuffer extends Buffer {
-	private Path savePath; // null= não definido
+	private Path savePath; // null = não definido
 	private boolean modified;
 
 	public void save() throws IOException {
@@ -26,10 +26,11 @@ public class FileBuffer extends Buffer {
 
 	public void open(Path path) throws IOException {  
 
-		List<String> teste = Files.readAllLines(path); // cria lista com todas as linhas que vieram do ficheiro path
+		BufferedReader brr = Files.newBufferedReader(path);
 
-		for (String string : teste) {
-			insertStr(string); // passa as strings para a LineList do buffer
+		while (brr.readLine() != null){
+			String tmp = brr.readLine(); // Cria uma string contendo uma linha do ficheiro aberto
+			insertStr(tmp); // Passa a string para a LineList do buffer
 		}
 
 	}
@@ -39,7 +40,7 @@ public class FileBuffer extends Buffer {
 		super.insertChar(c);
 		modified = true; // marcar modificação
 	}
-	
+
 	public void deleteChar() {
 		super.deleteChar();
 		modified = true; // marcar modificação
