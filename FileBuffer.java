@@ -10,6 +10,7 @@ public class FileBuffer extends Buffer {
 
 	public void save() throws IOException {
 		if (modified) saveAs(savePath);
+		modified=false;
 	}
 
 	public void saveAs(Path path) throws IOException { 
@@ -22,16 +23,21 @@ public class FileBuffer extends Buffer {
 			brw.write(stringbuilder.toString());   
 		}
 
+
 	}
 
 	public void open(Path path) throws IOException {  
 
 		BufferedReader brr = Files.newBufferedReader(path);
+		System.out.println(path);
+		String tmp;
 
-		while (brr.readLine() != null){
-			String tmp = brr.readLine(); // Cria uma string contendo uma linha do ficheiro aberto
+		while ((tmp = brr.readLine()) != null){
+			// Le buffer linha a linha
+			System.out.println(tmp);
 			insertStr(tmp); // Passa a string para a LineList do buffer
 		}
+
 
 	}
 
