@@ -7,22 +7,34 @@ import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class BufferView {
 	private Terminal term = TerminalFacade.createTerminal();
-	private FileBuffer fbuffer; // ou FileBuffer
+	private FileBuffer fbuffer;
 	private int width, height;
-	private int startRow; // linha início da janela
-
+	private int startRow; // primeira linha logica que aparece na janela
+	
 	private LinkedList<Integer> modifiedLines;  // linhas alteradas
 
 	public BufferView(FileBuffer fbuffer) {
+		
 		this.fbuffer = fbuffer;
 	}
 
-
+	
 	public void TestTerm()
 	{
+		
 		term.enterPrivateMode();
+		TerminalSize tamanhoterminal = term.getTerminalSize();
+		width = tamanhoterminal.getColumns();
+		height = tamanhoterminal.getRows();
+		
+		for(int i =0; i<height; i++){
+			modifiedLines.add(i);
+		}
 
 		while (true){
+			
+			redraw();
+			
 			Key k = term.readInput();
 			if (k != null) {
 				switch (k.getKind()) {
@@ -123,50 +135,50 @@ public class BufferView {
 		}
 	}
 
-	public void predraw(){
-		term.enterPrivateMode();
-		TerminalSize tamanhoterminal = term.getTerminalSize();
-		width = tamanhoterminal.getColumns();
-		height = tamanhoterminal.getRows();
 
-		int totalLines = fbuffer.getNumLines();
-		int remLines = totalLines - startRow; // 
-
-		int i = startRow;
-		while( i<remLines &&  i<(startRow + height) ) {
-			StringBuilder sb = fbuffer.getNthLine(i);
-			int tamanho = sb.length();
-
-			int divlinhas = tamanho/width; //quantas linhas visuais sao necessarias para cada linha lógica
-
+	public void redraw() {
+		for (Integer line : modifiedLines) {
+			drawN(line);
 		}
-
-
+		modifiedLines.clear();  // feito
 	}
-
-	//	public divideLinhas
-
-
+	
+	public void drawN(Integer line){
+		int[] tmp = viewPos(line);
+		//show();
+	}
+	
 	public int[] viewPos(int row, int col) {
-
-
 
 		System.out.println(width + " " + height);
 
 		return null;
 	}
-
-
-
-
-
-	public void redraw() {
-		for (Integer line : modifiedLines) {
-			// desenhar a linha
+	
+	public int[] viewPos(Integer line){
+		term.enterPrivateMode();
+		TerminalSize tamanhoterminal = term.getTerminalSize();
+		width = tamanhoterminal.getColumns();
+		height = tamanhoterminal.getRows();
+		
+		int v = 0; // posiÃ§Ã£o que a linha logica vai ter na janela
+		int l = startRow; // linha logica que estamos a analisar
+		int resto=0;
+		
+		while( v<height &&  l<line ) {
+			StringBuilder sb = fbuffer.getNthLine(l);
+			int tamanho = sb.length();
+			int divlinhas = tamanho/width;
+			resto = tamanho%width;
+			if (divlinhas > 1) {v+=divlinhas;} //quantas linhas visuais sao necessarias para cada linha lÃ³gica 
+			else{v++;}
+			l++;
 		}
-		modifiedLines.clear();  // feito
+	
+		int[] vector = new int[2];
+		vector[0] = v; // posicao que a linha logica vai ter na janela
+		vector[1] = resto;
+		return vector;
 	}
-
-
-
+	
 }
