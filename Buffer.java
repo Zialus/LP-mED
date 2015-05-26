@@ -133,6 +133,20 @@ public class Buffer {
 		sb.insert(c, linha);
 		currentCursor = new Cursor(l, c+linha.length());
 	}
+	
+	public void StringToList(String linha){
+
+		if (linha.contains("\n")) { throw new Error("Buffer.insertStr : newline in text"); }
+
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		StringBuilder sb = new StringBuilder("");
+		LineList.add(sb);
+
+		sb.insert(c, linha);
+		currentCursor = new Cursor(l+1,0);
+	}
 
 	public void insertLn(){
 		int l = currentCursor.getL();
