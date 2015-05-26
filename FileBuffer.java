@@ -34,8 +34,8 @@ public class FileBuffer extends Buffer {
 
 		while ((tmp = brr.readLine()) != null){
 			// Le buffer linha a linha
-			System.out.println(tmp);
-			insertStr(tmp); // Passa a string para a LineList do buffer
+			// System.out.println(tmp);
+			StringToList(tmp); // Passa a string para a LineList do buffer
 		}
 
 
