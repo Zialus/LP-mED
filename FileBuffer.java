@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileBuffer extends Buffer {
-	private Path savePath; // null = não definido
+	private Path savePath;
 	private boolean modified;
 
 	public void save() throws IOException {
@@ -23,21 +23,33 @@ public class FileBuffer extends Buffer {
 			brw.write(stringbuilder.toString());   
 		}
 
-
 	}
+
+	public boolean getModified(){
+		return modified;
+	}
+	public void setModified(boolean bol){
+		modified = bol;
+	}
+
 
 	public void open(Path path) throws IOException {  
 
 		BufferedReader brr = Files.newBufferedReader(path);
 		System.out.println(path);
-		String tmp;
 
+		// Ler o buffer linha a linha
+		String tmp;
 		while ((tmp = brr.readLine()) != null){
-			// Le buffer linha a linha
-			// System.out.println(tmp);
-			StringToList(tmp); // Passa a string para a LineList do buffer
+			insertStr(tmp);
+			insertLn();
 		}
 
+		Cursor cur = getCursor();	
+		cur.setC(0);	
+		cur.setL(0);
+
+		modified = true;
 
 	}
 
@@ -47,11 +59,10 @@ public class FileBuffer extends Buffer {
 		modified = true; // marcar modificação
 	}
 
+	@Override
 	public void deleteChar() {
 		super.deleteChar();
 		modified = true; // marcar modificação
 	}
-
-
 
 }

@@ -88,7 +88,7 @@ public class Buffer {
 			currentCursor = new Cursor(l+1, 0); 
 		}
 		else{
-			System.out.println("Already at the end");
+			//System.out.println("Already at the end");
 		}
 
 	}
@@ -133,20 +133,6 @@ public class Buffer {
 		sb.insert(c, linha);
 		currentCursor = new Cursor(l, c+linha.length());
 	}
-	
-	public void StringToList(String linha){
-
-		if (linha.contains("\n")) { throw new Error("Buffer.insertStr : newline in text"); }
-
-		int l = currentCursor.getL();
-		int c = currentCursor.getC();
-		
-		StringBuilder sb = new StringBuilder("");
-		LineList.add(sb);
-
-		sb.insert(c, linha);
-		currentCursor = new Cursor(l+1,0);
-	}
 
 	public void insertLn(){
 		int l = currentCursor.getL();
@@ -159,6 +145,7 @@ public class Buffer {
 		StringBuilder sb2 = new StringBuilder(st2);
 		LineList.set(l, sb1);
 		LineList.add(l+1, sb2);
+		currentCursor = new Cursor(l+1,0);
 	}
 
 	public void insertChar(char c){
@@ -173,7 +160,7 @@ public class Buffer {
 	public void deleteChar(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-
+		
 		if(c>0){
 			StringBuilder sb = LineList.get(l);
 			sb.deleteCharAt(c-1); // apagar caracter à frente do cursor
