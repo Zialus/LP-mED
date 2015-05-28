@@ -11,7 +11,7 @@ public class BufferView {
 	private FileBuffer fbuffer;
 	private int width, height;
 	private int startRow; // primeira linha logica que aparece na janela
-
+	private ArrayList<FileBuffer> bufferList = new ArrayList<FileBuffer>();  // Lista de Buffers
 	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();  // linhas alteradas
 
 	public BufferView(FileBuffer fbuffer) {
@@ -24,6 +24,16 @@ public class BufferView {
 		this.fbuffer = fbuffer;
 	}
 
+	public BufferView(ArrayList<FileBuffer> bufferList) {
+		term = TerminalFacade.createTerminal();
+		TerminalSize tamanhoterminal = term.getTerminalSize();
+		width = tamanhoterminal.getColumns();
+		height = tamanhoterminal.getRows();
+		//term = new SwingTerminal(30,40);
+
+		this.fbuffer = bufferList.get(0);
+	}
+	
 	public void refreshAfterLine(int line){
 
 		for(int i = line; (i<line+height) && (i < fbuffer.getNumLines() ); i++){
@@ -106,7 +116,7 @@ public class BufferView {
 					int linhaActual3 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
 					fbuffer.insertChar( k.getCharacter() );
 					fbuffer.setModified(true);
-					refreshAfterLine(linhaActual3);
+					modifiedLines.add(linhaActual3);
 					break;
 				case PageDown:
 					break;

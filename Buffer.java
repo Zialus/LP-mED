@@ -180,12 +180,14 @@ public class Buffer {
 
 		StringBuilder sb1 = LineList.get(l);   // guardar o que está na linha corrente
 		StringBuilder sb2 = LineList.get(l-1); // guardar o que está na linha anterior
-		StringBuilder sb3 = sb1.append(sb2);   // juntar as strings
+		int prevLineLength = sb2.length();
+		
+		StringBuilder sb3 = sb2.append(sb1);   // juntar as strings
 
 		LineList.remove(l);    // remover a linha corrente da lista
 		LineList.set(l-1,sb3); // colocar string nova(junção das duas) na lista
 
-		currentCursor = new Cursor(l-1, LineList.get(l-1).length()); //actualizar o cursor para a nova posição
+		currentCursor = new Cursor(l-1, prevLineLength); //actualizar o cursor para a nova posição
 	}
 
 }
