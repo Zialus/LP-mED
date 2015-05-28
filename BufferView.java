@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
@@ -7,24 +7,33 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class BufferView {
-	private Terminal term = TerminalFacade.createTerminal();
+	private Terminal term;
 	private FileBuffer fbuffer;
 	private int width, height;
 	private int startRow; // primeira linha logica que aparece na janela
 
 	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();  // linhas alteradas
-	
-
 
 	public BufferView(FileBuffer fbuffer) {
+		term = TerminalFacade.createTerminal();
+		TerminalSize tamanhoterminal = term.getTerminalSize();
+		width = tamanhoterminal.getColumns();
+		height = tamanhoterminal.getRows();
+		//term = new SwingTerminal(30,40);
 
 		this.fbuffer = fbuffer;
 	}
 
+	public void refreshAfterLine(int line){
 
-	public void TestTerm()
+		for(int i = line; (i<line+height) && (i < fbuffer.getNumLines() ); i++){
+			modifiedLines.add(i);
+		}
+
+	}
+
+	public void StartTerm()
 	{
-
 		term.enterPrivateMode();
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
@@ -35,16 +44,11 @@ public class BufferView {
 			modifiedLines.add(i);
 		}
 
+
+
 		while (true){
 
-			System.out.println("--------lalalalalalalal----------");
-			
-			for(int i = 0; i<height; i++){
-				System.out.println(fbuffer.getNthLine(i));
-			}
-			
-			
-			redraw();
+			if (fbuffer.getModified() == true){ redraw();}
 
 			Key k = term.readInput();
 			if (k != null) {
@@ -54,22 +58,37 @@ public class BufferView {
 					return;
 				case ArrowLeft: 
 					fbuffer.movePrev();
+					fbuffer.setModified(true);
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowRight:
 					fbuffer.moveNext();
+					fbuffer.setModified(true);
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowDown: 
 					fbuffer.moveNextLine();
+					fbuffer.setModified(true);
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowUp:
 					fbuffer.movePrevLine();
+					fbuffer.setModified(true);
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case Enter:
-					//TODO inserir no modifiedLines todas as linhas para baixo.
-					int temp = fbuffer.getCursor().getL();
-					modifiedLines.add(temp);
-					fbuffer.insertLn();
+					int linhaActual1 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de inserir nova linha
+					fbuffer.insertLn(); // Inserir nova linha
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					fbuffer.setModified(true);
+					refreshAfterLine(linhaActual1);
+					break;
 				case Backspace:
+					int linhaActual2 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
+					fbuffer.deleteChar(); // Apagar esse "caracter"
+					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					fbuffer.setModified(true);
+					refreshAfterLine(linhaActual2-1);
 					break;
 				case CursorLocation:
 					break;
@@ -79,35 +98,15 @@ public class BufferView {
 					break;
 				case End:
 					break;
-				case F1:
-					break;
-				case F10:
-					break;
-				case F11:
-					break;
-				case F12:
-					break;
-				case F2:
-					break;
-				case F3:
-					break;
-				case F4:
-					break;
-				case F5:
-					break;
-				case F6:
-					break;
-				case F7:
-					break;
-				case F8:
-					break;
-				case F9:
-					break;
 				case Home:
 					break;
 				case Insert:
 					break;
 				case NormalKey:
+					int linhaActual3 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
+					fbuffer.insertChar( k.getCharacter() );
+					fbuffer.setModified(true);
+					refreshAfterLine(linhaActual3);
 					break;
 				case PageDown:
 					break;
@@ -127,17 +126,16 @@ public class BufferView {
 
 			}
 
-			term.clearScreen();
+			//term.clearScreen();
 
-
-			term.applySGR(Terminal.SGR.ENTER_BOLD);
-			term.applyForegroundColor(Terminal.Color.RED);
+			//term.applySGR(Terminal.SGR.ENTER_BOLD);
+			//term.applyForegroundColor(Terminal.Color.RED);
 
 			term.flush();
 
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(10);
 			}
 			catch (InterruptedException ie)
 			{
@@ -148,82 +146,82 @@ public class BufferView {
 
 
 	public void redraw() {
+
+		System.out.println(Arrays.toString(modifiedLines.toArray()));
+
 		for (Integer line : modifiedLines) {
-			drawN(line);
+			drawN(line.intValue());
 		}
 		modifiedLines.clear();  // feito
+
+		term.moveCursor(fbuffer.getCursor().getC(), fbuffer.getCursor().getL());
+
+		fbuffer.setModified(false);
 	}
 
-	public void drawN(Integer line){
+	public void drawN(int line){
 		int[] tmp = viewPos(line);
 		int xInit = tmp[0];
-		int nLines = tmp[1];
-		int resto = tmp[2];
-		
-		
-		System.out.println(xInit + " " + nLines + " " + resto);
+
 
 		StringBuilder linha = fbuffer.getNthLine(line);
 
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 
-		term.moveCursor(xInit, 0);
+		term.moveCursor(0,xInit);
 
-		
-		//imprimir ar varias linhas no ecrâ
-		for (int i = 0; i < nLines; i++) {
-			for (int j = 0; j < width; j++) {
-				term.putCharacter(linha.charAt(j));
-			}
-			term.moveCursor(xInit++,0);
+		int size = linha.length();
+
+		for (int i = 0; i < width; i++) {
+			term.putCharacter(' ');
 		}
 
-		//imprimir ultima linha se necessario
-		if (resto!=0){
-			term.moveCursor(xInit++,0);
-			for (int j = 0; j < resto; j++) {
-				term.putCharacter(linha.charAt(j));
-			}
+		term.moveCursor(0,xInit);
+
+
+		for (int i = 0; i < size; i++) {
+			//System.out.print(linha.charAt(i));
+			term.putCharacter(linha.charAt(i));
+			if ( i>0 && (i%width) == 0) { term.moveCursor(0,xInit++); }
 		}
 
-		//"limpar" cursor
-		term.moveCursor(0,0);
+
 
 
 	}
 
-	public int[] viewPos(int row, int col) {
+	//	public int[] viewPos(int row, int col) {
+	//
+	//		System.out.println(width + " " + height);
+	//
+	//		return null;
+	//	}
 
-		System.out.println(width + " " + height);
+	public int[] viewPos(int line){
 
-		return null;
-	}
-
-	public int[] viewPos(Integer line){
-		
-		line++; // Indices começam em 0 mas linhas logicas começam em 1
-		
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 		height = tamanhoterminal.getRows();
 
-		int l = startRow; // linha logica que estamos a analisar
-		int v = 0; // posição que a linha logica vai ter na janela
+		int row = startRow; // linha logica inicial
+		int vis = 0; //  linha visual 
 		int resto = 0;
 		int divlinhas = 0;
-		while( v<height &&  l<line ) {
-			StringBuilder sb = fbuffer.getNthLine(l);
-			int tamanho = sb.length();
-			divlinhas = tamanho/width;
-			resto = tamanho%width;
-			if (divlinhas > 1) {v+=divlinhas;} //quantas linhas visuais sao necessarias para cada linha lógica 
-			else{v++;}
-			l++;
+		while( vis<height &&  row<line ) {
+			StringBuilder sb = fbuffer.getNthLine(row);
+			int tamanho = sb.length(); 
+
+			divlinhas = tamanho/width ;
+			resto = tamanho%width; 
+			//System.out.println("TAMANHO: " + tamanho + "width: " + width );
+			if (divlinhas > 1) {vis+=divlinhas;} //quantas linhas visuais sao necessarias para cada linha lógica 
+			else{vis++;}
+			row++;
 		}
 
 		int[] vector = new int[3] ;
-		vector[0] = v; // posicao que a linha logica vai ter na janela
+		vector[0] = vis; // posicao que a linha logica vai ter na janela
 		vector[1] = divlinhas; // quantas linhas essa linha logica vai ocupar na janela
 		vector[2] = resto; // quantos caracteres sobram
 		return vector;
