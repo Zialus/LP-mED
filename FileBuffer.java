@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,6 +9,10 @@ import java.nio.file.Path;
 public class FileBuffer extends Buffer {
 	private Path savePath;
 	private boolean modified;
+	
+	FileBuffer(Path path){
+		savePath = path;
+	}
 
 	public void save() throws IOException {
 		if (modified) saveAs(savePath);
@@ -14,14 +20,24 @@ public class FileBuffer extends Buffer {
 	}
 
 	public void saveAs(Path path) throws IOException { 
-
-		BufferedWriter brw = Files.newBufferedWriter(path);
+		
+		//File file = new File(path.toString());		
+		//FileWriter fw = new FileWriter(file.getAbsolutePath());
+		
+		BufferedWriter brw =  Files.newBufferedWriter(path);
+		
 		int numLines = getNumLines();
-
+		System.out.println("NUMLINES" + numLines);
+		
+		
 		for (int i = 0; i < numLines;i++) {
 			StringBuilder stringbuilder = getNthLine(i);
-			brw.write(stringbuilder.toString());   
-		}
+			System.out.println("linha i =  " + i);	
+			System.out.println(stringbuilder.toString());
+			brw.write(stringbuilder.toString());
+			brw.write("\n");
+		}	
+		brw.close();
 
 	}
 

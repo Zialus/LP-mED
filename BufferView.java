@@ -110,10 +110,24 @@ public class BufferView {
 				case Insert:
 					break;
 				case NormalKey:
+					if(k.isCtrlPressed()){
+						System.out.println("ENTROU NO CONTROL");
+						if(k.getCharacter() == 's'){
+							fbuffer.setModified(true);
+							System.out.println("ENTROU NO SAVE------------");
+							fbuffer.save();
+							System.out.println("ENTROU NO SAVE");
+						}
+					}
+					
+					
+					
+					else{
 					int linhaActual3 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
 					fbuffer.insertChar( k.getCharacter() );
 					fbuffer.setModified(true);
 					modifiedLines.add(linhaActual3);
+					}
 					break;
 				case PageDown:
 					break;
