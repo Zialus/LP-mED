@@ -109,7 +109,7 @@ public class Buffer {
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
-		if(l<LineList.size()){
+		if(l<LineList.size()-1){
 			currentCursor = new Cursor(l+1, Math.min(c, LineList.get(l+1).length() ));			
 		}
 		else{

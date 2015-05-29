@@ -37,7 +37,7 @@ public class BufferView {
 	
 	public void refreshAfterLine(int line){
 		for(int i = line; (i<line+height) && (i < fbuffer.getNumLines() ); i++){
-			modifiedLines.add(i);
+			if(i!=-1){modifiedLines.add(i);}
 		}
 
 	}
@@ -73,12 +73,16 @@ public class BufferView {
 					fbuffer.setModified(true);
 					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
-				case ArrowDown: 
+				case ArrowDown:
+//					if(term.)
+					//if(fbuffer.getCursor().getL() == fbuffer.getNumLines()-1){break;}
+					
 					fbuffer.moveNextLine();
 					fbuffer.setModified(true);
 					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowUp:
+					
 					fbuffer.movePrevLine();
 					fbuffer.setModified(true);
 					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
@@ -182,29 +186,31 @@ public class BufferView {
 
 	public void drawN(int line){
 		int[] tmp = viewPos(line);
-		int xInit = tmp[0];
-
+		int initRow = tmp[0];
+		int nLines = tmp[1];
 
 		StringBuilder linha = fbuffer.getNthLine(line);
 
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 
-		term.moveCursor(0,xInit);
+		term.moveCursor(0,initRow);
 
 		int size = linha.length();
 
+		//for(int j=0; j<nLines+1; j++){
 		for (int i = 0; i < width; i++) {
 			term.putCharacter(' ');
 		}
+		//}
 
-		term.moveCursor(0,xInit);
+		term.moveCursor(0,initRow);
 
 
 		for (int i = 0; i < size; i++) {
 			//System.out.print(linha.charAt(i));
 			term.putCharacter(linha.charAt(i));
-			if ( i>0 && (i%width) == 0) { term.moveCursor(0,xInit++); }
+			if ( i>0 && ((i%width) == 0)) { initRow=initRow+1; term.moveCursor(0,initRow); }
 		}
 
 
