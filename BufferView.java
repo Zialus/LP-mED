@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -35,31 +36,27 @@ public class BufferView {
 	}
 	
 	public void refreshAfterLine(int line){
-
 		for(int i = line; (i<line+height) && (i < fbuffer.getNumLines() ); i++){
 			modifiedLines.add(i);
 		}
 
 	}
 
-	public void StartTerm()
+	public void StartTerm() throws IOException
 	{
 		term.enterPrivateMode();
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 		height = tamanhoterminal.getRows();
 
-		for(int i = 0; i<height; i++){
-			//System.out.println(i + " " + height);
-			modifiedLines.add(i);
-		}
+	refreshAfterLine(0);
 
 
 
 		while (true){
 
 			if (fbuffer.getModified() == true){ redraw();}
-
+			
 			Key k = term.readInput();
 			if (k != null) {
 				switch (k.getKind()) {
@@ -69,34 +66,34 @@ public class BufferView {
 				case ArrowLeft: 
 					fbuffer.movePrev();
 					fbuffer.setModified(true);
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowRight:
 					fbuffer.moveNext();
 					fbuffer.setModified(true);
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowDown: 
 					fbuffer.moveNextLine();
 					fbuffer.setModified(true);
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowUp:
 					fbuffer.movePrevLine();
 					fbuffer.setModified(true);
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case Enter:
 					int linhaActual1 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de inserir nova linha
 					fbuffer.insertLn(); // Inserir nova linha
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					fbuffer.setModified(true);
 					refreshAfterLine(linhaActual1);
 					break;
 				case Backspace:
 					int linhaActual2 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
 					fbuffer.deleteChar(); // Apagar esse "caracter"
-					System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
+					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					fbuffer.setModified(true);
 					refreshAfterLine(linhaActual2-1);
 					break;
