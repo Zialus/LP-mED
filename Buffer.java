@@ -2,33 +2,33 @@ import java.util.LinkedList;
 
 public class Buffer {
 
-	private LinkedList<StringBuilder> LineList = new LinkedList<StringBuilder>();
+	private LinkedList<StringBuilder> lineList = new LinkedList<StringBuilder>();
 	private Cursor currentCursor = new Cursor (0,0);
 
 	//Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
-		LineList.add(vazia);
+		lineList.add(vazia);
 	}
 
 	//Contruir um buffer já com uma linha
 	public Buffer(String linhatemp) {
 		StringBuilder linha = new StringBuilder(linhatemp);
-		LineList.add(linha);
+		lineList.add(linha);
 		StringBuilder vazia = new StringBuilder();
-		LineList.add(vazia);
+		lineList.add(vazia);
 	}
 
 	public int getNumLines(){
-		return LineList.size();
+		return lineList.size();
 	}
 
 	public StringBuilder getNthLine(int i){
-		return LineList.get(i);
+		return lineList.get(i);
 	}
 
 	public LinkedList<StringBuilder> getAllLines(){
-		return LineList;
+		return lineList;
 	}
 
 	//--------------------------------------------------------------//
@@ -39,7 +39,7 @@ public class Buffer {
 		int l = newCursor.getL();
 		int c = newCursor.getC();
 
-		return( l>=0 && l<LineList.size() && c >= 0 && c<= LineList.get(l).length() );
+		return( l>=0 && l<lineList.size() && c >= 0 && c<= lineList.get(l).length() );
 	}
 
 	public Cursor getCursor(){
@@ -59,6 +59,7 @@ public class Buffer {
 		}
 	}
 
+	//Mover o cursor para o caracter anterior(onde quer que o caracter esteja)
 	public void movePrev() {
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
@@ -67,7 +68,7 @@ public class Buffer {
 			currentCursor.setC(c-1);
 		}
 		else if( l > 0){
-			currentCursor = new Cursor(l-1, LineList.get(l-1).length()); 
+			currentCursor = new Cursor(l-1, lineList.get(l-1).length()); 
 		}
 		else{
 			System.out.println("Already at the begining");
@@ -75,11 +76,12 @@ public class Buffer {
 
 	}
 
+	//Mover o cursor para o caracter seguinte(onde quer que o caracter esteja)
 	public void moveNext(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
-		int len = LineList.get(l).length();
+		int len = lineList.get(l).length();
 
 		if ( c < len ){
 			currentCursor.setC(c+1);
@@ -98,7 +100,7 @@ public class Buffer {
 		int c = currentCursor.getC();
 
 		if(l>0){
-			currentCursor = new Cursor(l-1, Math.min(c, LineList.get(l-1).length() ));			
+			currentCursor = new Cursor(l-1, Math.min(c, lineList.get(l-1).length() ));			
 		}
 		else{
 			System.out.println("Already at the first line of the buffer");
@@ -109,8 +111,8 @@ public class Buffer {
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
-		if(l<LineList.size()-1){
-			currentCursor = new Cursor(l+1, Math.min(c, LineList.get(l+1).length() ));			
+		if(l<lineList.size()-1){
+			currentCursor = new Cursor(l+1, Math.min(c, lineList.get(l+1).length() ));			
 		}
 		else{
 			System.out.println("Already at the last line of the buffer");
@@ -129,22 +131,22 @@ public class Buffer {
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
-		StringBuilder sb = LineList.get(l);
+		StringBuilder sb = lineList.get(l);
 		sb.insert(c, linha);
-		currentCursor = new Cursor(l, c+linha.length());
+		currentCursor = new Cursor(l, c+linha.length() );
 	}
 
 	public void insertLn(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 
-		StringBuilder sb = LineList.get(l);
+		StringBuilder sb = lineList.get(l);
 		String st1 = sb.substring(0, c);
-		String st2 = sb.substring(c, sb.length());
+		String st2 = sb.substring(c, sb.length() );
 		StringBuilder sb1 = new StringBuilder(st1);
 		StringBuilder sb2 = new StringBuilder(st2);
-		LineList.set(l, sb1);
-		LineList.add(l+1, sb2);
+		lineList.set(l, sb1);
+		lineList.add(l+1, sb2);
 		currentCursor = new Cursor(l+1,0);
 	}
 
@@ -160,9 +162,9 @@ public class Buffer {
 	public void deleteChar(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-		
+
 		if(c>0){
-			StringBuilder sb = LineList.get(l);
+			StringBuilder sb = lineList.get(l);
 			sb.deleteCharAt(c-1); // apagar caracter à frente do cursor
 			currentCursor = new Cursor(l, c-1);
 		}
@@ -178,16 +180,15 @@ public class Buffer {
 	private void deleteLn() {
 		int l = currentCursor.getL();
 
-		StringBuilder sb1 = LineList.get(l);   // guardar o que está na linha corrente
-		StringBuilder sb2 = LineList.get(l-1); // guardar o que está na linha anterior
-		int prevLineLength = sb2.length();
-		
+		StringBuilder sb1 = lineList.get(l);   // guardar o que está na linha corrente
+		StringBuilder sb2 = lineList.get(l-1); // guardar o que está na linha anterior
+		int prevLineLength = sb2.length();     // guardar o comprimemto da linha anterior para mover para lá o cursor no fim do delete
 		StringBuilder sb3 = sb2.append(sb1);   // juntar as strings
 
-		LineList.remove(l);    // remover a linha corrente da lista
-		LineList.set(l-1,sb3); // colocar string nova(junção das duas) na lista
+		lineList.remove(l);                    // remover a linha currente da lista
+		lineList.set(l-1,sb3);                 // colocar string nova(junção das duas) na lista
 
-		currentCursor = new Cursor(l-1, prevLineLength); //actualizar o cursor para a nova posição
+		currentCursor = new Cursor(l-1, prevLineLength); //actualizar o cursor para a nova posição(linha acima)
 	}
 
 }
