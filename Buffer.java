@@ -5,13 +5,13 @@ public class Buffer {
 	private LinkedList<StringBuilder> lineList = new LinkedList<StringBuilder>();
 	private Cursor currentCursor = new Cursor (0,0);
 
-	//Construir um buffer vazio
+	// Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
 		lineList.add(vazia);
 	}
 
-	//Contruir um buffer já com uma linha
+	// Contruir um buffer já com uma linha
 	public Buffer(String linhatemp) {
 		StringBuilder linha = new StringBuilder(linhatemp);
 		lineList.add(linha);
