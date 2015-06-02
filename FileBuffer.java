@@ -30,13 +30,12 @@ public class FileBuffer extends Buffer {
 		BufferedWriter brw =  Files.newBufferedWriter(path);
 
 		int numLines = getNumLines();
-		//		System.out.println("numLines" + numLines);
+		// System.out.println("numLines" + numLines);
 
 		for (int i=0; i<numLines; i++) {
-			StringBuilder stringbuilder = getNthLine(i);
-			//			System.out.println("linha i =  " + i);	
-			//			System.out.println(stringbuilder.toString());
-			brw.write(stringbuilder.toString());
+			StringBuilder sb = getNthLine(i);
+			// System.out.println("linha " + i + ": "+ sb.toString());	
+			brw.write(sb.toString());
 			brw.write("\n");
 		}
 
@@ -61,7 +60,7 @@ public class FileBuffer extends Buffer {
 		setCursor(curtmp);
 
 		modified = true;
-		
+
 		brr.close();
 
 	}

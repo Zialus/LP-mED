@@ -4,7 +4,38 @@ public class Buffer {
 
 	private LinkedList<StringBuilder> lineList = new LinkedList<StringBuilder>();
 	private Cursor currentCursor = new Cursor (0,0);
-
+	private int beginMarkRow, beginMarkCol; // linha e coluna de inicio
+	private int endMarkRow, endMarkCol;
+	private boolean marked = false; 
+	private StringBuilder clipboard;
+	
+	
+	public void setBeginMark(int line, int col){
+		beginMarkRow = line;
+		beginMarkCol = col;
+		marked = true;
+	}
+	
+	public void setEndMark(int line, int col){
+		endMarkRow = line;
+		endMarkCol = col;
+	}
+	
+	public void unsetMarks(){
+		marked = false;
+	}
+	
+	public void copy(){
+		
+		
+	}
+	
+	public void paste(){
+		
+		
+	}	
+	
+	
 	// Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
