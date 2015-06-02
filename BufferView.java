@@ -111,31 +111,30 @@ public class BufferView {
 					break;
 				case Delete:
 					break;
-				case EOF:
-					break;
 				case End:
+					fbuffer.moveEndLine();
+					fbuffer.setModified(true);
 					break;
 				case Home:
-					break;
-				case Insert:
+					fbuffer.moveStartLine();
+					fbuffer.setModified(true);
 					break;
 				case NormalKey:
 					if(k.isCtrlPressed()){
 						System.out.println("ENTROU NO CONTROL");
+
 						if(k.getCharacter() == 's'){
-							fbuffer.setModified(true);
-							System.out.println("ENTROU NO SAVE------------");
-							fbuffer.save();
 							System.out.println("ENTROU NO SAVE");
+							fbuffer.setModified(true);
+							fbuffer.save();
+							System.out.println("FEZ SAVE");
 						}
 
 						if(k.getCharacter() == 'b'){
-							System.out.println("next buffer");
+							System.out.println("ENTROU NO next buffer");
 
 							int sizeCircList = bufferList.size();
-
 							currentBuffer = (currentBuffer+1)%sizeCircList;
-
 							fbuffer = bufferList.get(currentBuffer);
 							fbuffer.setModified(true);
 							term.clearScreen();
@@ -146,9 +145,16 @@ public class BufferView {
 					}
 
 					else if(k.isAltPressed() ){
+						System.out.println("ENTROU NO ALT");
 						if(k.getCharacter() == 'b'){
-							fbuffer.setModified(true);
 							System.out.println("prev buffer");
+							fbuffer.setModified(true);
+
+							int sizeCircList = bufferList.size();
+							currentBuffer = (currentBuffer-1);
+							if (currentBuffer == 0) { currentBuffer = sizeCircList-1;}
+
+
 							fbuffer = bufferList.get(currentBuffer);
 							System.out.println("prev DID IT");
 						}

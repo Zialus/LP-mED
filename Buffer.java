@@ -106,6 +106,32 @@ public class Buffer {
 			System.out.println("Already at the first line of the buffer");
 		}
 	}
+	
+	public void moveEndLine(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		StringBuilder sb = lineList.get(l);
+		int tamanho = sb.length();
+		
+		if(c<tamanho-1){
+			currentCursor = new Cursor(l,tamanho-1);			
+		}
+		else{
+			System.out.println("Already at the end of the line");
+		}
+	}
+	
+	public void moveStartLine(){
+		int l = currentCursor.getL();
+		int c = currentCursor.getC();
+		
+		if(c>0){
+			currentCursor = new Cursor(l,0);			
+		}
+		else{
+			System.out.println("Already at the begining of the line");
+		}
+	}
 
 	public void moveNextLine(){
 		int l = currentCursor.getL();
