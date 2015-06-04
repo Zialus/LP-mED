@@ -99,8 +99,8 @@ public class BufferView {
 					Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
 
 					commandList.push(commandE);	
-					
-					
+
+
 					fbuffer.setModified(true);
 					refreshAfterLine(linhaActual1);
 					break;
@@ -109,8 +109,8 @@ public class BufferView {
 						startRow = Math.max(startRow-10, 0); 
 						refreshAfterLine(startRow);
 					}
-					
-					
+
+
 					int linhaActual2 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
 
 					int cursorLinha  = fbuffer.getCursor().getL();
@@ -179,50 +179,40 @@ public class BufferView {
 							if (!commandList.empty()) {
 								Comando command = commandList.pop(); // ir buscar ultimo comando guardado
 
+								fbuffer.setCursor(command.cursor);
+								int linhaActual99 = fbuffer.getCursor().getL();
+
 								switch (command.tipo){
 								case InsertChar:
-									fbuffer.setCursor(command.cursor);
-									int linhaActual7 = fbuffer.getCursor().getL(); // Linha onde está o cursor depois de inserir "caracter"
-									
-									if(startRow >linhaActual7){
-										startRow = linhaActual7;
-										fbuffer.deleteChar();
-										fbuffer.setModified(true);
-										refreshAfterLine(startRow);
-									}
-									
-									else {
-										fbuffer.deleteChar();
-										fbuffer.setModified(true);
-										refreshAfterLine(linhaActual7-1);
-									}
-									
+
+
+
+									fbuffer.deleteChar();
+									fbuffer.setModified(true);
 
 									break;
 								case DeleteChar:
-									fbuffer.setCursor(command.cursor);
-									int linhaActual8 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
 									fbuffer.insertChar(command.caracter);
 									fbuffer.setModified(true);
-									refreshAfterLine(linhaActual8);
 									break;
 								case InsertLn:
-									fbuffer.setCursor(command.cursor);
-									int linhaActual9 = fbuffer.getCursor().getL();
 									fbuffer.deleteChar(); 
 									fbuffer.setModified(true);
-									refreshAfterLine(linhaActual9-1);
 									break;
 								case DeleteLine:
-									fbuffer.setCursor(command.cursor);
-									int linhaActual4 = fbuffer.getCursor().getL(); 
 									fbuffer.insertLn();
 									fbuffer.setModified(true);
-									refreshAfterLine(linhaActual4);
 									break;
 								default:
 									break;
 								}
+
+								if(startRow >linhaActual99){
+									startRow = Math.max(linhaActual99-10, 0);
+									refreshAfterLine(startRow);
+								}else {refreshAfterLine(linhaActual99-1);}
+
+
 
 							}
 							else {

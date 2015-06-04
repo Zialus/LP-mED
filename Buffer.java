@@ -4,38 +4,41 @@ public class Buffer {
 
 	private LinkedList<StringBuilder> lineList = new LinkedList<StringBuilder>();
 	private Cursor currentCursor = new Cursor (0,0);
-	private int beginMarkRow, beginMarkCol; // linha e coluna de inicio
-	private int endMarkRow, endMarkCol;
-	private boolean marked = false; 
+	private int beginMarkRow, beginMarkCol; // inicio de marcação para clipboard
+	private int endMarkRow, endMarkCol; // fim de marcação para clipboard
+	private boolean marked = false;
 	private StringBuilder clipboard;
-	
-	
+
 	public void setBeginMark(int line, int col){
 		beginMarkRow = line;
 		beginMarkCol = col;
 		marked = true;
 	}
-	
+
 	public void setEndMark(int line, int col){
 		endMarkRow = line;
 		endMarkCol = col;
 	}
-	
+
 	public void unsetMarks(){
 		marked = false;
 	}
-	
-	public void copy(){
-		
-		
+
+	public boolean getMarked(){
+		return marked;
 	}
-	
+
+	public void copy(){
+
+
+	}
+
 	public void paste(){
-		
-		
+
+
 	}	
-	
-	
+
+
 	// Construir um buffer vazio
 	public Buffer() {
 		StringBuilder vazia = new StringBuilder();
@@ -137,13 +140,13 @@ public class Buffer {
 			System.out.println("Already at the first line of the buffer");
 		}
 	}
-	
+
 	public void moveEndLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
 		StringBuilder sb = lineList.get(l);
 		int tamanho = sb.length();
-		
+
 		if(c<tamanho-1){
 			currentCursor = new Cursor(l,tamanho-1);			
 		}
@@ -151,11 +154,11 @@ public class Buffer {
 			System.out.println("Already at the end of the line");
 		}
 	}
-	
+
 	public void moveStartLine(){
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
-		
+
 		if(c>0){
 			currentCursor = new Cursor(l,0);			
 		}
