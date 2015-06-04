@@ -18,7 +18,7 @@ public class BufferView {
 	private ArrayList<FileBuffer> bufferList = new ArrayList<FileBuffer>();  // Lista com os varios Buffers
 	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();     // Lista com as linhas alteradas
 	private int cursorLine,cursorRow;                        				 // Linha e coluna visual do cursor
-	
+
 
 	// Constuir um BufferView só com um buffer
 	public BufferView(FileBuffer fbuffer) {
@@ -63,12 +63,10 @@ public class BufferView {
 				case ArrowLeft: 
 					fbuffer.movePrev();
 					fbuffer.setModified(true);
-					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowRight:
 					fbuffer.moveNext();
 					fbuffer.setModified(true);
-					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowDown:
 					fbuffer.moveNextLine();
@@ -80,7 +78,6 @@ public class BufferView {
 						refreshAfterLine(startRow);
 					}
 
-					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case ArrowUp:
 					fbuffer.movePrevLine();
@@ -91,10 +88,8 @@ public class BufferView {
 						refreshAfterLine(startRow);
 					}
 
-					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					break;
 				case Enter:
-					int linhaActual1 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de inserir nova linha
 					fbuffer.insertLn(); // Inserir nova linha
 
 					if(cursorLine==height-1){
@@ -137,14 +132,9 @@ public class BufferView {
 					}
 
 
-					//System.out.println( fbuffer.getCursor().getL() + " " + fbuffer.getCursor().getC() );
 					fbuffer.setModified(true);
 					refreshAfterLine(linhaActual2-1);
 
-					break;
-				case CursorLocation:
-					break;
-				case Delete:
 					break;
 				case End:
 					fbuffer.moveEndLine();
@@ -156,24 +146,23 @@ public class BufferView {
 					break;
 				case NormalKey:
 					if(k.isCtrlPressed()){
-						System.out.println("ENTROU NO CONTROL");
+						//System.out.println("ENTROU NO CONTROL");
 
 						if(k.getCharacter() == 's'){
-							System.out.println("ENTROU NO SAVE");
+							//System.out.println("ENTROU NO SAVE");
 							fbuffer.setModified(true);
 							fbuffer.save();
 							System.out.println("FEZ SAVE");
 						}
 
 						if(k.getCharacter() == 'b'){
-							System.out.println("ENTROU NO next buffer");
-
+							//System.out.println("ENTROU NO NEXT BUFFER");
 							int sizeCircList = bufferList.size();
 							currentBuffer = (currentBuffer+1)%sizeCircList;
 							fbuffer = bufferList.get(currentBuffer);
 							fbuffer.setModified(true);
 							term.clearScreen();
-							System.out.println("next DID IT");
+							System.out.println("Movi-mme para o next Buffer");
 							refreshAfterLine(0);
 						}
 
@@ -242,7 +231,7 @@ public class BufferView {
 							fbuffer = bufferList.get(currentBuffer);
 							fbuffer.setModified(true);
 							term.clearScreen();
-							//							System.out.println("prev DID IT");
+							System.out.println("Movi-me para o prev Buffer");
 							refreshAfterLine(0);
 						}
 					}
@@ -295,7 +284,7 @@ public class BufferView {
 
 	public void redraw() {
 
-		System.out.println(Arrays.toString(modifiedLines.toArray()));
+		//System.out.println(Arrays.toString(modifiedLines.toArray()));
 
 		for (Integer line : modifiedLines) {
 			if (line>=0) {
@@ -308,14 +297,14 @@ public class BufferView {
 		int cursorL = fbuffer.getCursor().getL();
 		int cursorC = fbuffer.getCursor().getC();
 
-		System.out.println("posicoes logicas do cursor: " + cursorL + "," + cursorC);
+		//System.out.println("posicoes logicas do cursor: " + cursorL + "," + cursorC);
 
 		int[] pos = viewPos(cursorL,cursorC);
 		int line = pos[0]; int row = pos[2];
 		cursorRow = row;
 		cursorLine = line;
 
-		System.out.println("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
+		//System.out.println("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
 		term.moveCursor(cursorRow,cursorLine);
 
 		fbuffer.setModified(false);
@@ -358,9 +347,7 @@ public class BufferView {
 		term.moveCursor(0,initRow);
 
 		for (int i = 0; i < linhaSize; i++) {
-			System.out.print(linha.charAt(i));
 			if ( i>0 && ((i%width) == 0)) { 
-				System.out.println("!!mudei!!");
 				initRow++; term.moveCursor(0,initRow); }
 			term.putCharacter(linha.charAt(i));
 
