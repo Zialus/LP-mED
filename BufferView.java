@@ -18,7 +18,7 @@ public class BufferView {
 	private ArrayList<FileBuffer> bufferList = new ArrayList<FileBuffer>();  // Lista com os varios Buffers
 	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();     // Lista com as linhas alteradas
 	private int cursorLine,cursorRow;                        				 // Linha e coluna visual do cursor
-	private Stack<Comando> commandList = new Stack<Comando>();
+	
 
 	// Constuir um BufferView só com um buffer
 	public BufferView(FileBuffer fbuffer) {
@@ -103,7 +103,7 @@ public class BufferView {
 
 					Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
 
-					commandList.push(commandE);	
+					fbuffer.commandList.push(commandE);	
 
 
 					fbuffer.setModified(true);
@@ -126,14 +126,14 @@ public class BufferView {
 						char c = tmp.charAt(cursorColuna-1);
 						fbuffer.deleteChar(); // Apagar esse "caracter"
 						Comando commandB = new Comando(Type.DeleteChar, fbuffer.getCursor(),c);
-						commandList.push(commandB);	
+						fbuffer.commandList.push(commandB);	
 					}
 
 					else{ // Se estiver mesmo a apagar a linha em si
 						char c = ' ';
 						fbuffer.deleteChar(); // Apagar esse "caracter"
 						Comando commandB = new Comando(Type.DeleteLine, fbuffer.getCursor(),c);
-						commandList.push(commandB);	
+						fbuffer.commandList.push(commandB);	
 					}
 
 
@@ -181,8 +181,8 @@ public class BufferView {
 						// CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
 						if(k.getCharacter() == 'z'){
 
-							if (!commandList.empty()) {
-								Comando command = commandList.pop(); // ir buscar ultimo comando guardado
+							if (!fbuffer.commandList.empty()) {
+								Comando command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
 
 								fbuffer.setCursor(command.cursor);
 								int linhaActual99 = fbuffer.getCursor().getL();
@@ -256,7 +256,7 @@ public class BufferView {
 
 						Comando commandI = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
 
-						commandList.push(commandI);	
+						fbuffer.commandList.push(commandI);	
 
 					}
 					break;

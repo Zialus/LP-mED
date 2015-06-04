@@ -3,11 +3,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Stack;
 
 public class FileBuffer extends Buffer {
 	private Path savePath;
 	private boolean modified;
-
+	public Stack<Comando> commandList = new Stack<Comando>();
+	
 	FileBuffer(Path path){
 		savePath = path;
 		modified = false;
