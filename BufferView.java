@@ -1,7 +1,5 @@
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
 
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
@@ -162,7 +160,7 @@ public class BufferView {
 							fbuffer = bufferList.get(currentBuffer);
 							fbuffer.setModified(true);
 							term.clearScreen();
-							System.out.println("Movi-mme para o next Buffer");
+							System.out.println("Movi-me para o next Buffer");
 							refreshAfterLine(0);
 						}
 
@@ -248,16 +246,6 @@ public class BufferView {
 						fbuffer.commandList.push(commandI);	
 
 					}
-					break;
-				case PageDown:
-					break;
-				case PageUp:
-					break;
-				case ReverseTab:
-					break;
-				case Tab:
-					break;
-				case Unknown:
 					break;
 				default:
 					break;
