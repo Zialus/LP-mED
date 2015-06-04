@@ -337,14 +337,16 @@ public class BufferView {
 
 		term.moveCursor(0,initRow);
 
-		int size = linha.length();
+		int linhaSize = linha.length();
 
+		//Apagar lixo
 		for(int j=0; j<nLines+1; j++){
 			for (int i = 0; i < width; i++) {
 				term.putCharacter(' ');
 			}
 		}
 
+		//Apagar linhas que ja nao existem
 		if ( fbuffer.getNumLines()-1 == line ){
 			for(int j=initRow; j<lastRow; j++){
 				for (int i = 0; i < width; i++) {
@@ -355,11 +357,13 @@ public class BufferView {
 
 		term.moveCursor(0,initRow);
 
-
-		for (int i = 0; i < size; i++) {
-			//System.out.print(linha.charAt(i));
+		for (int i = 0; i < linhaSize; i++) {
+			System.out.print(linha.charAt(i));
+			if ( i>0 && ((i%width) == 0)) { 
+				System.out.println("!!mudei!!");
+				initRow++; term.moveCursor(0,initRow); }
 			term.putCharacter(linha.charAt(i));
-			if ( i>0 && ((i%width) == 0)) { initRow=initRow+1; term.moveCursor(0,initRow); }
+
 		}
 
 
@@ -369,7 +373,7 @@ public class BufferView {
 	}
 
 	public int[] viewPos(int line,int col){
-
+		int[] vector = new int[3] ;
 		int row = startRow; // Linha logica inicial a considerar
 		int vis = 0;        // Linha visual inicial a considerar	
 		int r = 0;          // Quantidade de caracteres na ultima linha
@@ -406,14 +410,12 @@ public class BufferView {
 		}
 
 		if (vis==height){
-			int[] vector = new int[3] ;
 			vector[0] = -20;
 			return vector;
 		}
 
 
 		//System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);			
-		int[] vector = new int[3] ;
 		vector[0] = vis; // posicao que a linha logica vai ter na janela
 		vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
 
@@ -421,26 +423,22 @@ public class BufferView {
 			vector[2] = col;
 		}
 
-		else if(col>0 && col==width){
-			vector[2] = col%width; // quantos caracteres sobram (not really) ( se houver um caracter fico na posicao 0)
-			//System.out.println("q: " + q);			
+		else if(col==width){
+			vector[2] = col%width; // quantos caracteres sobram (not really)
 			vector[0] = vis+col/width;
 		}
 
-		else if(col>0 && col%width==0){
-			System.out.println(width);
-			vector[2] = width-1 ;
-			//System.out.println("q: " + q);			
-			vector[0] = vis+(col/width)-1;
+		else if(col%width==0){
+			vector[2] = 0;
+			vector[0] = vis+(col/width);
 		}
 
-		else if(col>0 && col>width){
-			vector[2] = col%width-1 ; // quantos caracteres sobram (not really) ( se houver um caracter fico na posicao 0)
-			//System.out.println("q: " + q);			
+		else if(col>width){
+			vector[2] = col%width ; // quantos caracteres sobram (not really)
 			vector[0] = vis+col/width;
 		}
 
-		else if(col>0 && col<width){
+		else if(col<width){
 			vector[2] = col%width; // quantos caracteres sobram
 			vector[0] = vis;
 		}
