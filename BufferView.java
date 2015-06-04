@@ -14,6 +14,7 @@ public class BufferView {
 	private int currentBuffer;                           					 // Indice do Buffer que está a ser editado neste momento
 	private int width, height;               								 // Altura e largura da janela com o terminal
 	private int startRow;                   								 // Primeira linha logica que aparece na janela
+	private int lastRow;                                                     // Ultima linha logica que aparece na janela
 	private ArrayList<FileBuffer> bufferList = new ArrayList<FileBuffer>();  // Lista com os varios Buffers
 	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();     // Lista com as linhas alteradas
 	private int cursorLine,cursorRow;                        				 // Linha e coluna visual do cursor
@@ -96,13 +97,17 @@ public class BufferView {
 					int linhaActual1 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de inserir nova linha
 					fbuffer.insertLn(); // Inserir nova linha
 
+					if(cursorLine==height-1){
+						Math.min(startRow+=10,lastRow);
+					}
+
 					Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
 
 					commandList.push(commandE);	
 
 
 					fbuffer.setModified(true);
-					refreshAfterLine(linhaActual1);
+					refreshAfterLine(startRow);
 					break;
 				case Backspace:
 					if(cursorLine==0 && startRow != 0){ 
@@ -184,33 +189,35 @@ public class BufferView {
 
 								switch (command.tipo){
 								case InsertChar:
-
-
-
 									fbuffer.deleteChar();
-									fbuffer.setModified(true);
-
 									break;
 								case DeleteChar:
 									fbuffer.insertChar(command.caracter);
-									fbuffer.setModified(true);
 									break;
 								case InsertLn:
 									fbuffer.deleteChar(); 
-									fbuffer.setModified(true);
 									break;
 								case DeleteLine:
 									fbuffer.insertLn();
-									fbuffer.setModified(true);
 									break;
 								default:
 									break;
 								}
 
-								if(startRow >linhaActual99){
+								fbuffer.setModified(true);
+
+
+								if(startRow > linhaActual99){
 									startRow = Math.max(linhaActual99-10, 0);
 									refreshAfterLine(startRow);
-								}else {refreshAfterLine(linhaActual99-1);}
+								}
+
+								if(linhaActual99 > lastRow){
+									startRow = Math.min(linhaActual99+10,fbuffer.getNumLines()-1);
+									refreshAfterLine(startRow);
+								}
+
+								else {refreshAfterLine(linhaActual99-1);}
 
 
 
@@ -229,15 +236,14 @@ public class BufferView {
 						System.out.println("ENTROU NO ALT");
 						if(k.getCharacter() == 'b'){
 							System.out.println("prev buffer");
-							fbuffer.setModified(true);
-
 							int sizeCircList = bufferList.size();
 							currentBuffer = (currentBuffer-1);
-							if (currentBuffer == 0) { currentBuffer = sizeCircList-1;}
-
-
+							if (currentBuffer == -1) { currentBuffer = sizeCircList-1;}
 							fbuffer = bufferList.get(currentBuffer);
-							System.out.println("prev DID IT");
+							fbuffer.setModified(true);
+							term.clearScreen();
+							//							System.out.println("prev DID IT");
+							refreshAfterLine(0);
 						}
 					}
 
@@ -293,7 +299,7 @@ public class BufferView {
 
 		for (Integer line : modifiedLines) {
 			if (line>=0) {
-				System.out.println("linha " + line + "starRow " + startRow);
+				//System.out.println("linha: " + line + " starRow: " + startRow);
 				drawN(line.intValue());}
 		}
 
@@ -339,14 +345,13 @@ public class BufferView {
 			}
 		}
 
-		//		if ( fbuffer.getNumLines()-1 == line ) ;
-		//		{
-		//			for(int j=initRow; j<height; j++){
-		//				for (int i = 0; i < width; i++) {
-		//					term.putCharacter(' ');
-		//				}
-		//			}
-		//		}
+		if ( fbuffer.getNumLines()-1 == line ){
+			for(int j=initRow; j<lastRow; j++){
+				for (int i = 0; i < width; i++) {
+					term.putCharacter(' ');
+				}
+			}
+		}
 
 		term.moveCursor(0,initRow);
 
@@ -396,6 +401,10 @@ public class BufferView {
 		r = tamanho%width; 
 		q = tamanho/width ;
 
+		if(vis==height-1){
+			lastRow = line;
+		}
+
 		if (vis==height){
 			int[] vector = new int[3] ;
 			vector[0] = -20;
@@ -403,7 +412,7 @@ public class BufferView {
 		}
 
 
-		System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);			
+		//System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);			
 		int[] vector = new int[3] ;
 		vector[0] = vis; // posicao que a linha logica vai ter na janela
 		vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
