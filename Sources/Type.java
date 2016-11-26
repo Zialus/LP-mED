@@ -1,1 +1,1 @@
-public enum Type {DeleteChar,DeleteLine,InsertChar,InsertLn};
+public enum Type {DeleteChar,DeleteLine,InsertChar,InsertLn}
