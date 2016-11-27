@@ -11,15 +11,15 @@ public class Testar {
 
 		//Path path = FileSystems.getDefault().getPath(args[0]);
 
-		ArrayList<FileBuffer> lista = new ArrayList<FileBuffer>();  // Lista de Buffers
+		ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
 
-		for (int i = 0; i < args.length; i++) {
-			Path path = FileSystems.getDefault().getPath(args[i]);
+		for (String arg : args) {
+			Path path = FileSystems.getDefault().getPath(arg);
 			FileBuffer fb = new FileBuffer(path);
 
 			try {
 				fb.open(path);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -52,7 +52,7 @@ public class Testar {
 
 	}
 
-	static void test_insert_char() {
+	private static void test_insert_char() {
 		Buffer buff_teste = new Buffer("123456789abcdef");
 		Cursor cursor1 = new Cursor(0,5);
 		buff_teste.setCursor(cursor1);
@@ -87,7 +87,7 @@ public class Testar {
 
 	}
 
-	static void test_empty_buffer() {
+	private static void test_empty_buffer() {
 		//Buffer buff_teste = new Buffer();
 		//StringBuilder sb1 = buff_teste.LineList.get(0);
 		//System.out.println(buff_teste.LineList.get(1));
@@ -97,14 +97,14 @@ public class Testar {
 
 	}
 
-	static void test_complex_buffer() {
+	private static void test_complex_buffer() {
 		//Buffer buff_teste = new Buffer("123456789abcdef");
 		//System.out.println(buff_teste.LineList.get(0));
 		//System.out.println(buff_teste.LineList.get(1));
 		//System.out.println(buff_teste.LineList.get(2));		
 	}
 
-	static void test_move_prev() {
+	private static void test_move_prev() {
 		Buffer buff_teste = new Buffer("123456789abcdef");
 		Cursor cursor1 = new Cursor(0,2);
 		buff_teste.setCursor(cursor1);
@@ -132,7 +132,7 @@ public class Testar {
 		System.out.println("Position " + " l: " + buff_teste.getCursor().getL() + " c: " + buff_teste.getCursor().getC());
 	}
 
-	static void test_move_next() {
+	private static void test_move_next() {
 		Buffer buff_teste = new Buffer("123456789abcdef");
 
 		Cursor cursor1 = new Cursor(0,13);
@@ -160,7 +160,7 @@ public class Testar {
 		System.out.println("Position " + " l: " + buff_teste.getCursor().getL() + " c: " + buff_teste.getCursor().getC());
 	}
 
-	static void test_delete_char() {
+	private static void test_delete_char() {
 		Buffer buff_teste = new Buffer("123456789abcdef");
 		Cursor cursor1 = new Cursor(0,11);
 		buff_teste.setCursor(cursor1);

@@ -9,7 +9,7 @@ public class Editor {
 
 	public static void main(String[] args) throws IOException {
 
-		ArrayList<FileBuffer> lista = new ArrayList<FileBuffer>();  // Lista de Buffers
+		ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
 
 		if (args.length ==0){
 			System.out.println("Pode-se correr o programa com um ficheiro");
@@ -21,16 +21,11 @@ public class Editor {
 		}
 
 
-		for (int i = 0; i < args.length; i++) {
-			Path path = FileSystems.getDefault().getPath(args[i]);
+		for (String arg : args) {
+			Path path = FileSystems.getDefault().getPath(arg);
 			FileBuffer fb = new FileBuffer(path);
 
-			try {
-				fb.open(path);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fb.open(path);
 
 			lista.add(fb);
 		}

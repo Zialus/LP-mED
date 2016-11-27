@@ -13,8 +13,8 @@ public class BufferView {
 	private FileBuffer fbuffer;												 // FileBuffer associado ao terminal neste momento
 	private int currentBuffer;                           					 // Indice do Buffer que está a ser editado neste momento
 	private int width, height;               								 // Altura e largura da janela com o terminal
-	private ArrayList<FileBuffer> bufferList = new ArrayList<FileBuffer>();  // Lista com os varios Buffers
-	private ArrayList<Integer> modifiedLines = new ArrayList<Integer>();     // Lista com as linhas alteradas
+	private ArrayList<FileBuffer> bufferList = new ArrayList<>();  // Lista com os varios Buffers
+	private ArrayList<Integer> modifiedLines = new ArrayList<>();     // Lista com as linhas alteradas
 	private int cursorLine,cursorRow;                        				 // Linha e coluna visual do cursor
 
 
@@ -37,7 +37,7 @@ public class BufferView {
 		this.fbuffer = bufferList.get(0); 			// Usar o primeiro buffer da lista de buffers como "default"
 	}
 
-	public void refreshAfterLine(int line) {
+	private void refreshAfterLine(int line) {
 		for(int i = line; (i<line+height) && (i < fbuffer.getNumLines() ); i++){
 			if(i!=-1){modifiedLines.add(i);}
 		}
@@ -270,14 +270,15 @@ public class BufferView {
 	}
 
 
-	public void redraw() {
+	private void redraw() {
 
 		//System.out.println(Arrays.toString(modifiedLines.toArray()));
 
 		for (Integer line : modifiedLines) {
 			if (line>=0) {
 				//System.out.println("linha: " + line + " starRow: " + fbuffer.startRow);
-				drawN(line.intValue());}
+				drawN(line);
+			}
 		}
 
 		modifiedLines.clear();  // Limpar lista de linhas modificadas uma vez que estas ja foram imprimidas
@@ -298,7 +299,7 @@ public class BufferView {
 		fbuffer.setModified(false);
 	}
 
-	public void drawN(int line){
+	private void drawN(int line){
 		int[] tmp = viewPos(line,0);
 		int initRow = tmp[0];
 		int nLines = tmp[1];
@@ -347,7 +348,7 @@ public class BufferView {
 
 	}
 
-	public int[] viewPos(int line,int col){
+	private int[] viewPos(int line, int col){
 		int[] vector = new int[3] ;
 		int row = fbuffer.startRow; // Linha logica inicial a considerar
 		int vis = 0;        // Linha visual inicial a considerar	

@@ -10,7 +10,7 @@ import java.util.Stack;
 public class FileBuffer extends Buffer {
 	private Path savePath;
 	private boolean modified;
-	public Stack<Comando> commandList = new Stack<Comando>();
+	public Stack<Comando> commandList = new Stack<>();
 	public int startRow;                   					// Primeira linha logica que aparece na janela
 	public int lastRow;                                     // Ultima linha logica que aparece na janela
 
@@ -31,7 +31,7 @@ public class FileBuffer extends Buffer {
 		modified = false;
 	}
 
-	public void saveAs(Path path) throws IOException {
+	private void saveAs(Path path) throws IOException {
 
 		BufferedWriter brw =  Files.newBufferedWriter(path);
 

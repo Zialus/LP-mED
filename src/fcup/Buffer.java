@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Buffer {
 
-	private LinkedList<StringBuilder> lineList = new LinkedList<StringBuilder>();
+	private LinkedList<StringBuilder> lineList = new LinkedList<>();
 	private Cursor currentCursor = new Cursor (0,0);
 	private int beginMarkRow, beginMarkCol; // inicio de marcação para clipboard
 	private int endMarkRow, endMarkCol; // fim de marcação para clipboard
@@ -32,11 +32,9 @@ public class Buffer {
 
 	public void copy(){
 
-
 	}
 
 	public void paste(){
-
 
 	}
 
@@ -71,7 +69,7 @@ public class Buffer {
 	//-------------funções para obter e mover o cursor--------------//
 	//--------------------------------------------------------------//
 
-	public boolean validPosition(Cursor newCursor){
+	private boolean validPosition(Cursor newCursor){
 		int l = newCursor.getL();
 		int c = newCursor.getC();
 
@@ -126,7 +124,7 @@ public class Buffer {
 			currentCursor = new Cursor(l+1, 0);
 		}
 		else{
-			//System.out.println("Already at the end");
+			System.out.println("Already at the end");
 		}
 
 	}
