@@ -91,7 +91,7 @@ public class BufferView {
 						fbuffer.insertLn(); // Inserir nova linha
 
 						if(cursorLine==height-1){
-							Math.min(fbuffer.startRow+=10,fbuffer.lastRow);
+							fbuffer.startRow = Math.min(fbuffer.startRow+10,fbuffer.lastRow);
 						}
 
 						Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
@@ -105,7 +105,6 @@ public class BufferView {
 					case Backspace:
 						if(cursorLine==0 && fbuffer.startRow != 0){
 							fbuffer.startRow = Math.max(fbuffer.startRow-10, 0);
-							refreshAfterLine(fbuffer.startRow);
 						}
 
 
@@ -131,7 +130,7 @@ public class BufferView {
 
 
 						fbuffer.setModified(true);
-						refreshAfterLine(linhaActual2-1);
+						refreshAfterLine(Math.min(linhaActual2-1,fbuffer.startRow));
 
 						break;
 					case End:
