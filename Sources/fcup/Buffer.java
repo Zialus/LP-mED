@@ -1,3 +1,5 @@
+package fcup;
+
 import java.util.LinkedList;
 
 public class Buffer {

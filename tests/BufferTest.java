@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import fcup.Buffer;
+import fcup.Cursor;
 import org.junit.Test;
 
 public class BufferTest {

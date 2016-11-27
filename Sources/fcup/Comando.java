@@ -1,3 +1,5 @@
+package fcup;
+
 public class Comando {
 	public Type tipo;
 	public Cursor cursor;

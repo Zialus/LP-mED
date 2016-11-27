@@ -1,3 +1,5 @@
+package fcup;
+
 public class Cursor {
 
 	private int l;
