@@ -55,200 +55,200 @@ public class BufferView {
 			Key k = term.readInput();
 			if (k != null) {
 				switch (k.getKind()) {
-				case Escape:
-					term.exitPrivateMode();
-					return;
-				case ArrowLeft: 
-					fbuffer.movePrev();
-					fbuffer.setModified(true);
-					break;
-				case ArrowRight:
-					fbuffer.moveNext();
-					fbuffer.setModified(true);
-					break;
-				case ArrowDown:
-					fbuffer.moveNextLine();
-					fbuffer.setModified(true);
-
-					if(cursorLine==height-1){
-						fbuffer.startRow += 10; 
-						term.clearScreen(); 
-						refreshAfterLine(fbuffer.startRow);
-					}
-
-					break;
-				case ArrowUp:
-					fbuffer.movePrevLine();
-					fbuffer.setModified(true);
-
-					if(cursorLine==0 && fbuffer.startRow != 0){ 
-						fbuffer.startRow = Math.max(fbuffer.startRow-10, 0); 
-						refreshAfterLine(fbuffer.startRow);
-					}
-
-					break;
-				case Enter:
-					fbuffer.insertLn(); // Inserir nova linha
-
-					if(cursorLine==height-1){
-						Math.min(fbuffer.startRow+=10,fbuffer.lastRow);
-					}
-
-					Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
-
-					fbuffer.commandList.push(commandE);	
-
-
-					fbuffer.setModified(true);
-					refreshAfterLine(fbuffer.startRow);
-					break;
-				case Backspace:
-					if(cursorLine==0 && fbuffer.startRow != 0){ 
-						fbuffer.startRow = Math.max(fbuffer.startRow-10, 0); 
-						refreshAfterLine(fbuffer.startRow);
-					}
-
-
-					int linhaActual2 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
-
-					int cursorLinha  = fbuffer.getCursor().getL();
-					int cursorColuna = fbuffer.getCursor().getC();
-					StringBuilder tmp = fbuffer.getNthLine(cursorLinha);
-
-					if(cursorColuna>0){ // Se a apagar alguma coisa na linha, mas a linha continuar "viva"
-						char c = tmp.charAt(cursorColuna-1);
-						fbuffer.deleteChar(); // Apagar esse "caracter"
-						Comando commandB = new Comando(Type.DeleteChar, fbuffer.getCursor(),c);
-						fbuffer.commandList.push(commandB);	
-					}
-
-					else{ // Se estiver mesmo a apagar a linha em si
-						char c = ' ';
-						fbuffer.deleteChar(); // Apagar esse "caracter"
-						Comando commandB = new Comando(Type.DeleteLine, fbuffer.getCursor(),c);
-						fbuffer.commandList.push(commandB);	
-					}
-
-
-					fbuffer.setModified(true);
-					refreshAfterLine(linhaActual2-1);
-
-					break;
-				case End:
-					fbuffer.moveEndLine();
-					fbuffer.setModified(true);
-					break;
-				case Home:
-					fbuffer.moveStartLine();
-					fbuffer.setModified(true);
-					break;
-				case NormalKey:
-					if(k.isCtrlPressed()){
-						//System.out.println("ENTROU NO CONTROL");
-
-						if(k.getCharacter() == 's'){
-							//System.out.println("ENTROU NO SAVE");
-							fbuffer.setModified(true);
-							fbuffer.save();
-							System.out.println("FEZ SAVE");
-						}
-
-						if(k.getCharacter() == 'b'){
-							//System.out.println("ENTROU NO NEXT BUFFER");
-							int sizeCircList = bufferList.size();
-							currentBuffer = (currentBuffer+1)%sizeCircList;
-							fbuffer = bufferList.get(currentBuffer);
-							fbuffer.setModified(true);
-							term.clearScreen();
-							System.out.println("Movi-me para o next Buffer");
-							refreshAfterLine(fbuffer.startRow);
-						}
-
-
-						// CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
-						if(k.getCharacter() == 'z'){
-
-							if (!fbuffer.commandList.empty()) {
-								Comando command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
-
-								fbuffer.setCursor(command.cursor);
-								int linhaActual99 = fbuffer.getCursor().getL();
-
-								switch (command.tipo){
-								case InsertChar:
-									fbuffer.deleteChar();
-									break;
-								case DeleteChar:
-									fbuffer.insertChar(command.caracter);
-									break;
-								case InsertLn:
-									fbuffer.deleteChar(); 
-									break;
-								case DeleteLine:
-									fbuffer.insertLn();
-									break;
-								default:
-									break;
-								}
-
-								fbuffer.setModified(true);
-
-
-								if(fbuffer.startRow > linhaActual99){
-									fbuffer.startRow = Math.max(linhaActual99-10, 0);
-									refreshAfterLine(fbuffer.startRow);
-								}
-
-								if(linhaActual99 > fbuffer.lastRow){
-									fbuffer.startRow = Math.min(linhaActual99+10,fbuffer.getNumLines()-1);
-									refreshAfterLine(fbuffer.startRow);
-								}
-
-								else {refreshAfterLine(linhaActual99-1);}
-
-
-
-							}
-							else {
-								System.out.println("Nada a disfazer!");
-							}
-
-
-						}
-
-
-					}
-
-					else if(k.isAltPressed() ){
-						System.out.println("ENTROU NO ALT");
-						if(k.getCharacter() == 'b'){
-							System.out.println("prev buffer");
-							int sizeCircList = bufferList.size();
-							currentBuffer = (currentBuffer-1);
-							if (currentBuffer == -1) { currentBuffer = sizeCircList-1;}
-							fbuffer = bufferList.get(currentBuffer);
-							fbuffer.setModified(true);
-							term.clearScreen();
-							System.out.println("Movi-me para o prev Buffer");
-							refreshAfterLine(fbuffer.startRow);
-						}
-					}
-
-					//Inserir caracter "normal"
-					else{
-						int linhaActual3 = fbuffer.getCursor().getL(); 
-						fbuffer.insertChar( k.getCharacter() );
+					case Escape:
+						term.exitPrivateMode();
+						return;
+					case ArrowLeft:
+						fbuffer.movePrev();
 						fbuffer.setModified(true);
-						modifiedLines.add(linhaActual3);
+						break;
+					case ArrowRight:
+						fbuffer.moveNext();
+						fbuffer.setModified(true);
+						break;
+					case ArrowDown:
+						fbuffer.moveNextLine();
+						fbuffer.setModified(true);
 
-						Comando commandI = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
+						if(cursorLine==height-1){
+							fbuffer.startRow += 10;
+							term.clearScreen();
+							refreshAfterLine(fbuffer.startRow);
+						}
 
-						fbuffer.commandList.push(commandI);	
+						break;
+					case ArrowUp:
+						fbuffer.movePrevLine();
+						fbuffer.setModified(true);
 
-					}
-					break;
-				default:
-					break;
+						if(cursorLine==0 && fbuffer.startRow != 0){
+							fbuffer.startRow = Math.max(fbuffer.startRow-10, 0);
+							refreshAfterLine(fbuffer.startRow);
+						}
+
+						break;
+					case Enter:
+						fbuffer.insertLn(); // Inserir nova linha
+
+						if(cursorLine==height-1){
+							Math.min(fbuffer.startRow+=10,fbuffer.lastRow);
+						}
+
+						Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
+
+						fbuffer.commandList.push(commandE);
+
+
+						fbuffer.setModified(true);
+						refreshAfterLine(fbuffer.startRow);
+						break;
+					case Backspace:
+						if(cursorLine==0 && fbuffer.startRow != 0){
+							fbuffer.startRow = Math.max(fbuffer.startRow-10, 0);
+							refreshAfterLine(fbuffer.startRow);
+						}
+
+
+						int linhaActual2 = fbuffer.getCursor().getL(); // Linha onde está o cursor antes de apagar "caracter"
+
+						int cursorLinha  = fbuffer.getCursor().getL();
+						int cursorColuna = fbuffer.getCursor().getC();
+						StringBuilder tmp = fbuffer.getNthLine(cursorLinha);
+
+						if(cursorColuna>0){ // Se a apagar alguma coisa na linha, mas a linha continuar "viva"
+							char c = tmp.charAt(cursorColuna-1);
+							fbuffer.deleteChar(); // Apagar esse "caracter"
+							Comando commandB = new Comando(Type.DeleteChar, fbuffer.getCursor(),c);
+							fbuffer.commandList.push(commandB);
+						}
+
+						else{ // Se estiver mesmo a apagar a linha em si
+							char c = ' ';
+							fbuffer.deleteChar(); // Apagar esse "caracter"
+							Comando commandB = new Comando(Type.DeleteLine, fbuffer.getCursor(),c);
+							fbuffer.commandList.push(commandB);
+						}
+
+
+						fbuffer.setModified(true);
+						refreshAfterLine(linhaActual2-1);
+
+						break;
+					case End:
+						fbuffer.moveEndLine();
+						fbuffer.setModified(true);
+						break;
+					case Home:
+						fbuffer.moveStartLine();
+						fbuffer.setModified(true);
+						break;
+					case NormalKey:
+						if(k.isCtrlPressed()){
+							//System.out.println("ENTROU NO CONTROL");
+
+							if(k.getCharacter() == 's'){
+								//System.out.println("ENTROU NO SAVE");
+								fbuffer.setModified(true);
+								fbuffer.save();
+								System.out.println("FEZ SAVE");
+							}
+
+							if(k.getCharacter() == 'b'){
+								//System.out.println("ENTROU NO NEXT BUFFER");
+								int sizeCircList = bufferList.size();
+								currentBuffer = (currentBuffer+1)%sizeCircList;
+								fbuffer = bufferList.get(currentBuffer);
+								fbuffer.setModified(true);
+								term.clearScreen();
+								System.out.println("Movi-me para o next Buffer");
+								refreshAfterLine(fbuffer.startRow);
+							}
+
+
+							// CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
+							if(k.getCharacter() == 'z'){
+
+								if (!fbuffer.commandList.empty()) {
+									Comando command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
+
+									fbuffer.setCursor(command.cursor);
+									int linhaActual99 = fbuffer.getCursor().getL();
+
+									switch (command.tipo){
+										case InsertChar:
+											fbuffer.deleteChar();
+											break;
+										case DeleteChar:
+											fbuffer.insertChar(command.caracter);
+											break;
+										case InsertLn:
+											fbuffer.deleteChar();
+											break;
+										case DeleteLine:
+											fbuffer.insertLn();
+											break;
+										default:
+											break;
+									}
+
+									fbuffer.setModified(true);
+
+
+									if(fbuffer.startRow > linhaActual99){
+										fbuffer.startRow = Math.max(linhaActual99-10, 0);
+										refreshAfterLine(fbuffer.startRow);
+									}
+
+									if(linhaActual99 > fbuffer.lastRow){
+										fbuffer.startRow = Math.min(linhaActual99+10,fbuffer.getNumLines()-1);
+										refreshAfterLine(fbuffer.startRow);
+									}
+
+									else {refreshAfterLine(linhaActual99-1);}
+
+
+
+								}
+								else {
+									System.out.println("Nada a disfazer!");
+								}
+
+
+							}
+
+
+						}
+
+						else if(k.isAltPressed() ){
+							System.out.println("ENTROU NO ALT");
+							if(k.getCharacter() == 'b'){
+								System.out.println("prev buffer");
+								int sizeCircList = bufferList.size();
+								currentBuffer = (currentBuffer-1);
+								if (currentBuffer == -1) { currentBuffer = sizeCircList-1;}
+								fbuffer = bufferList.get(currentBuffer);
+								fbuffer.setModified(true);
+								term.clearScreen();
+								System.out.println("Movi-me para o prev Buffer");
+								refreshAfterLine(fbuffer.startRow);
+							}
+						}
+
+						//Inserir caracter "normal"
+						else{
+							int linhaActual3 = fbuffer.getCursor().getL();
+							fbuffer.insertChar( k.getCharacter() );
+							fbuffer.setModified(true);
+							modifiedLines.add(linhaActual3);
+
+							Comando commandI = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
+
+							fbuffer.commandList.push(commandI);
+
+						}
+						break;
+					default:
+						break;
 
 				}
 
@@ -335,7 +335,7 @@ public class BufferView {
 		term.moveCursor(0,initRow);
 
 		for (int i = 0; i < linhaSize; i++) {
-			if ( i>0 && ((i%width) == 0)) { 
+			if ( i>0 && ((i%width) == 0)) {
 				initRow++; term.moveCursor(0,initRow); }
 			term.putCharacter(linha.charAt(i));
 
@@ -354,22 +354,22 @@ public class BufferView {
 		int r = 0;          // Quantidade de caracteres na ultima linha
 		int q = 0;          // Quantidade de linhas visuais completas que uma linha logica ocupa
 
-		
+
 		while( vis<height &&  row<line ) {
 			StringBuilder sb = fbuffer.getNthLine(row);
-			int tamanho = sb.length(); 
+			int tamanho = sb.length();
 
 			q = tamanho/width ;
 			//System.out.println("tamanho logico da linha: " + row + " " + tamanho);
-			r = tamanho%width; 
+			r = tamanho%width;
 			if(r==0) {vis+= Math.max(q,1);}
 			else {vis += q+1;}
 			row++;
 		}
 
 		StringBuilder sb = fbuffer.getNthLine(line);
-		int tamanho = sb.length(); 
-		r = tamanho%width; 
+		int tamanho = sb.length();
+		r = tamanho%width;
 		q = tamanho/width ;
 
 		if(vis==height-1){

@@ -1,7 +1,6 @@
 package fcup;
 
 import java.io.IOException;
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class Testar {
 		}
 
 		System.out.println(lista.toString());
-		BufferView buff = new BufferView(lista);	
+		BufferView buff = new BufferView(lista);
 
 		buff.StartTerm();
 
@@ -204,7 +203,7 @@ public class Testar {
 		System.out.println(buff_teste.getNthLine(0));
 		System.out.println(buff_teste.getNthLine(1));
 		//System.out.println(buff_teste.getNthLine(2));
-		System.out.println("------------Position " + " l: " + buff_teste.getCursor().getL() + " c: " + buff_teste.getCursor().getC());	
+		System.out.println("------------Position " + " l: " + buff_teste.getCursor().getL() + " c: " + buff_teste.getCursor().getC());
 	}
 
 }

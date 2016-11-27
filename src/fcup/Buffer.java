@@ -38,7 +38,7 @@ public class Buffer {
 	public void paste(){
 
 
-	}	
+	}
 
 
 	// Construir um buffer vazio
@@ -104,7 +104,7 @@ public class Buffer {
 			currentCursor.setC(c-1);
 		}
 		else if( l > 0){
-			currentCursor = new Cursor(l-1, lineList.get(l-1).length()); 
+			currentCursor = new Cursor(l-1, lineList.get(l-1).length());
 		}
 		else{
 			System.out.println("Already at the begining");
@@ -123,7 +123,7 @@ public class Buffer {
 			currentCursor.setC(c+1);
 		}
 		else if( l+1 < getNumLines()){
-			currentCursor = new Cursor(l+1, 0); 
+			currentCursor = new Cursor(l+1, 0);
 		}
 		else{
 			//System.out.println("Already at the end");
@@ -136,7 +136,7 @@ public class Buffer {
 		int c = currentCursor.getC();
 
 		if(l>0){
-			currentCursor = new Cursor(l-1, Math.min(c, lineList.get(l-1).length() ));			
+			currentCursor = new Cursor(l-1, Math.min(c, lineList.get(l-1).length() ));
 		}
 		else{
 			System.out.println("Already at the first line of the buffer");
@@ -150,7 +150,7 @@ public class Buffer {
 		int tamanho = sb.length();
 
 		if(c<tamanho-1){
-			currentCursor = new Cursor(l,tamanho-1);			
+			currentCursor = new Cursor(l,tamanho-1);
 		}
 		else{
 			System.out.println("Already at the end of the line");
@@ -162,7 +162,7 @@ public class Buffer {
 		int c = currentCursor.getC();
 
 		if(c>0){
-			currentCursor = new Cursor(l,0);			
+			currentCursor = new Cursor(l,0);
 		}
 		else{
 			System.out.println("Already at the begining of the line");
@@ -174,7 +174,7 @@ public class Buffer {
 		int c = currentCursor.getC();
 
 		if(l<lineList.size()-1){
-			currentCursor = new Cursor(l+1, Math.min(c, lineList.get(l+1).length() ));			
+			currentCursor = new Cursor(l+1, Math.min(c, lineList.get(l+1).length() ));
 		}
 		else{
 			System.out.println("Already at the last line of the buffer");

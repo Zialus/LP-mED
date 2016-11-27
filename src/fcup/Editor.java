@@ -16,11 +16,11 @@ public class Editor {
 			System.out.println("java -jar <caminho/para/o_ficheiro.jar> <caminho/para/o_ficheiro.txt>");
 			System.out.println("ou varios");
 			System.out.println("java -jar <caminho/para/o_ficheiro.jar> <caminho/para/o_ficheiro1.txt> <etc.txt>");
-			
+
 			System.exit(0);
 		}
-		
-		
+
+
 		for (int i = 0; i < args.length; i++) {
 			Path path = FileSystems.getDefault().getPath(args[i]);
 			FileBuffer fb = new FileBuffer(path);
@@ -36,7 +36,7 @@ public class Editor {
 		}
 
 		System.out.println(lista.toString());
-		BufferView buff = new BufferView(lista);	
+		BufferView buff = new BufferView(lista);
 
 		buff.StartTerm();
 
