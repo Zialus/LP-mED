@@ -19,7 +19,7 @@ public class FileBuffer extends Buffer {
 		modified = false;
 	}
 
-	public boolean getModified(){
+	public boolean isModified(){
 		return modified;
 	}
 	public void setModified(boolean bol){

@@ -50,7 +50,7 @@ public class BufferView {
 
 		while (true){
 
-			if (fbuffer.getModified() == true){ redraw();}
+			if (fbuffer.isModified()){ redraw();}
 
 			Key k = term.readInput();
 			if (k != null) {
