@@ -184,9 +184,9 @@ public class Buffer {
 	//------------funções para inserir/apagar caracteres------------//
 	//--------------------------------------------------------------//
 
-	public void insertStr(String linha){
+	public void insertStr(String linha) {
 
-		if (linha.contains("\n")) { throw new Error("Buffer.insertStr : newline in text"); }
+		if (linha.contains("\n")) { throw new CantHaveNewLines("Buffer.insertStr : newline in text"); }
 
 		int l = currentCursor.getL();
 		int c = currentCursor.getC();
