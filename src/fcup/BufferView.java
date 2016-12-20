@@ -301,11 +301,12 @@ public class BufferView {
 	private void drawN(int line){
 		int[] tmp = viewPos(line,0);
 		int initRow = tmp[0];
-		int nLines = tmp[1];
 
 		if (initRow == -20){
 			return;
 		}
+
+		int nLines = tmp[1];
 
 		StringBuilder linha = fbuffer.getNthLine(line);
 
