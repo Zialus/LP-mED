@@ -10,12 +10,12 @@ import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class BufferView {
 	private Terminal term;
-	private FileBuffer fbuffer;												 // FileBuffer associado ao terminal neste momento
-	private int currentBuffer;                           					 // Indice do Buffer que está a ser editado neste momento
-	private int width, height;               								 // Altura e largura da janela com o terminal
-	private ArrayList<FileBuffer> bufferList = new ArrayList<>();  // Lista com os varios Buffers
-	private ArrayList<Integer> modifiedLines = new ArrayList<>();     // Lista com as linhas alteradas
-	private int cursorLine,cursorRow;                        				 // Linha e coluna visual do cursor
+	private FileBuffer fbuffer;                                   // FileBuffer associado ao terminal neste momento
+	private int currentBuffer;                                    // Indice do Buffer que está a ser editado neste momento
+	private int width, height;                                    // Altura e largura da janela com o terminal
+	private ArrayList<FileBuffer> bufferList = new ArrayList<>(); // Lista com os varios Buffers
+	private ArrayList<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
+	private int cursorLine,cursorRow;                             // Linha e coluna visual do cursor
 
 
 	// Constuir um BufferView só com um buffer
@@ -351,7 +351,7 @@ public class BufferView {
 	private int[] viewPos(int line, int col){
 		int[] vector = new int[3] ;
 		int row = fbuffer.startRow; // Linha logica inicial a considerar
-		int vis = 0;        // Linha visual inicial a considerar	
+		int vis = 0;        // Linha visual inicial a considerar
 		int r = 0;          // Quantidade de caracteres na ultima linha
 		int q = 0;          // Quantidade de linhas visuais completas que uma linha logica ocupa
 
@@ -383,7 +383,7 @@ public class BufferView {
 		}
 
 
-		//System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);			
+		//System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);
 		vector[0] = vis; // posicao que a linha logica vai ter na janela
 		vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
 
