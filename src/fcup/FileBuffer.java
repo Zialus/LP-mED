@@ -10,7 +10,7 @@ import java.util.Stack;
 public class FileBuffer extends Buffer {
 	private Path savePath;
 	private boolean modified;
-	public Stack<Comando> commandList = new Stack<>();
+	public Stack<Command> commandList = new Stack<>();
 	public int startRow;                   					// Primeira linha logica que aparece na janela
 	public int lastRow;                                     // Ultima linha logica que aparece na janela
 

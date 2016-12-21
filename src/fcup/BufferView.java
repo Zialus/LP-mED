@@ -94,7 +94,7 @@ public class BufferView {
 							fbuffer.startRow = Math.min(fbuffer.startRow+10,fbuffer.lastRow);
 						}
 
-						Comando commandE = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
+						Command commandE = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
 
 						fbuffer.commandList.push(commandE);
 
@@ -117,14 +117,14 @@ public class BufferView {
 						if(cursorColuna>0){ // Se a apagar alguma coisa na linha, mas a linha continuar "viva"
 							char c = tmp.charAt(cursorColuna-1);
 							fbuffer.deleteChar(); // Apagar esse "caracter"
-							Comando commandB = new Comando(Type.DeleteChar, fbuffer.getCursor(),c);
+							Command commandB = new Command(Type.DeleteChar, fbuffer.getCursor(),c);
 							fbuffer.commandList.push(commandB);
 						}
 
 						else{ // Se estiver mesmo a apagar a linha em si
 							char c = ' ';
 							fbuffer.deleteChar(); // Apagar esse "caracter"
-							Comando commandB = new Comando(Type.DeleteLine, fbuffer.getCursor(),c);
+							Command commandB = new Command(Type.DeleteLine, fbuffer.getCursor(),c);
 							fbuffer.commandList.push(commandB);
 						}
 
@@ -168,7 +168,7 @@ public class BufferView {
 							if(k.getCharacter() == 'z'){
 
 								if (!fbuffer.commandList.empty()) {
-									Comando command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
+									Command command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
 
 									fbuffer.setCursor(command.cursor);
 									int linhaActual99 = fbuffer.getCursor().getL();
@@ -240,7 +240,7 @@ public class BufferView {
 							fbuffer.setModified(true);
 							modifiedLines.add(linhaActual3);
 
-							Comando commandI = new Comando(Type.InsertChar, fbuffer.getCursor(),' ');
+							Command commandI = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
 
 							fbuffer.commandList.push(commandI);
 
