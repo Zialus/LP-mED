@@ -3,10 +3,10 @@ package fcup;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.input.Key;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.TerminalSize;
+import com.googlecode.lanterna.TerminalSize;
 
 public class BufferView {
 	private Terminal term;
@@ -19,8 +19,9 @@ public class BufferView {
 
 
 	// Constuir um BufferView só com um buffer
-	public BufferView(FileBuffer fbuffer) {
-		term = TerminalFacade.createTerminal();
+	public BufferView(FileBuffer fbuffer) throws IOException {
+        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
+        term = defaultTerminalFactory.createTerminal();
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 		height = tamanhoterminal.getRows();
@@ -28,9 +29,10 @@ public class BufferView {
 	}
 
 	// Constuir um BufferView com multiplos buffers
-	public BufferView(ArrayList<FileBuffer> bufferList) {
-		term = TerminalFacade.createTerminal();
-		TerminalSize sizeTerm = term.getTerminalSize();
+	public BufferView(ArrayList<FileBuffer> bufferList) throws IOException {
+        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
+        term = defaultTerminalFactory.createTerminal();
+        TerminalSize sizeTerm = term.getTerminalSize();
 		width = sizeTerm.getColumns();
 		height = sizeTerm.getRows();
 		this.bufferList = bufferList;
@@ -52,9 +54,9 @@ public class BufferView {
 
 			if (fbuffer.isModified()){ redraw();}
 
-			Key k = term.readInput();
+			KeyStroke k = term.pollInput();
 			if (k != null) {
-				switch (k.getKind()) {
+				switch (k.getKeyType()) {
 					case Escape:
 						term.exitPrivateMode();
 						return;
@@ -141,19 +143,19 @@ public class BufferView {
 						fbuffer.moveStartLine();
 						fbuffer.setModified(true);
 						break;
-					case NormalKey:
-						if(k.isCtrlPressed()){
-							//System.out.println("ENTROU NO CONTROL");
+                    case Character:
+						if(k.isCtrlDown()){
+							System.out.println("ENTROU NO CONTROL");
 
 							if(k.getCharacter() == 's'){
-								//System.out.println("ENTROU NO SAVE");
+								System.out.println("ENTROU NO SAVE");
 								fbuffer.setModified(true);
 								fbuffer.save();
 								System.out.println("FEZ SAVE");
 							}
 
 							if(k.getCharacter() == 'b'){
-								//System.out.println("ENTROU NO NEXT BUFFER");
+                                System.out.println("ENTROU NO NEXT BUFFER");
 								int sizeCircList = bufferList.size();
 								currentBuffer = (currentBuffer+1)%sizeCircList;
 								fbuffer = bufferList.get(currentBuffer);
@@ -166,7 +168,7 @@ public class BufferView {
 
 							// CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
 							if(k.getCharacter() == 'z'){
-
+                                System.out.println("ENTROU NO UNDO");
 								if (!fbuffer.commandList.empty()) {
 									Command command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
 
@@ -218,7 +220,7 @@ public class BufferView {
 
 						}
 
-						else if(k.isAltPressed() ){
+						else if(k.isAltDown() ){
 							System.out.println("ENTROU NO ALT");
 							if(k.getCharacter() == 'b'){
 								System.out.println("prev buffer");
@@ -269,7 +271,7 @@ public class BufferView {
 	}
 
 
-	private void redraw() {
+	private void redraw() throws IOException {
 
 		//System.out.println(Arrays.toString(modifiedLines.toArray()));
 
@@ -293,12 +295,12 @@ public class BufferView {
 		cursorLine = line;
 
 		//System.out.println("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
-		term.moveCursor(cursorRow,cursorLine);
+		term.setCursorPosition(cursorRow,cursorLine);
 
 		fbuffer.setModified(false);
 	}
 
-	private void drawN(int line){
+	private void drawN(int line) throws IOException {
 		int[] tmp = viewPos(line,0);
 		int initRow = tmp[0];
 
@@ -313,7 +315,7 @@ public class BufferView {
 		TerminalSize tamanhoterminal = term.getTerminalSize();
 		width = tamanhoterminal.getColumns();
 
-		term.moveCursor(0,initRow);
+		term.setCursorPosition(0,initRow);
 
 		int linhaSize = linha.length();
 
@@ -333,11 +335,11 @@ public class BufferView {
 			}
 		}
 
-		term.moveCursor(0,initRow);
+		term.setCursorPosition(0,initRow);
 
 		for (int i = 0; i < linhaSize; i++) {
 			if ( i>0 && ((i%width) == 0)) {
-				initRow++; term.moveCursor(0,initRow); }
+				initRow++; term.setCursorPosition(0,initRow); }
 			term.putCharacter(linha.charAt(i));
 
 		}
