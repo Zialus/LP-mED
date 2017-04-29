@@ -8,80 +8,80 @@ import java.nio.file.Path;
 import java.util.Stack;
 
 public class FileBuffer extends Buffer {
-	private Path savePath;
-	private boolean modified;
-	public Stack<Command> commandList = new Stack<>();
-	public int startRow;                   					// Primeira linha logica que aparece na janela
-	public int lastRow;                                     // Ultima linha logica que aparece na janela
+    private Path savePath;
+    private boolean modified;
+    public Stack<Command> commandList = new Stack<>();
+    public int startRow;                   					// Primeira linha logica que aparece na janela
+    public int lastRow;                                     // Ultima linha logica que aparece na janela
 
-	FileBuffer(Path path){
-		savePath = path;
-		modified = false;
-	}
+    FileBuffer(Path path){
+        savePath = path;
+        modified = false;
+    }
 
-	public boolean isModified(){
-		return modified;
-	}
-	public void setModified(boolean bol){
-		modified = bol;
-	}
+    public boolean isModified(){
+        return modified;
+    }
+    public void setModified(boolean bol){
+        modified = bol;
+    }
 
-	public void save() throws IOException {
-		if (modified) saveAs(savePath);
-		modified = false;
-	}
+    public void save() throws IOException {
+        if (modified) saveAs(savePath);
+        modified = false;
+    }
 
-	private void saveAs(Path path) throws IOException {
+    private void saveAs(Path path) throws IOException {
 
-		BufferedWriter brw =  Files.newBufferedWriter(path);
+        BufferedWriter brw =  Files.newBufferedWriter(path);
 
-		int numLines = getNumLines();
-		// System.out.println("numLines" + numLines);
+        int numLines = getNumLines();
+        // System.out.println("numLines" + numLines);
 
-		for (int i=0; i<numLines; i++) {
-			StringBuilder sb = getNthLine(i);
-			// System.out.println("linha " + i + ": "+ sb.toString());	
-			brw.write(sb.toString());
-			brw.write("\n");
-		}
+        for (int i=0; i<numLines; i++) {
+            StringBuilder sb = getNthLine(i);
+            // System.out.println("linha " + i + ": "+ sb.toString());
+            brw.write(sb.toString());
+            brw.write("\n");
+        }
 
-		brw.close();
+        brw.close();
 
-	}
+    }
 
-	public void open(Path path) throws IOException {
+    public void open(Path path) throws IOException {
 
-		BufferedReader brr = Files.newBufferedReader(path);
-		System.out.println(path);
+        BufferedReader brr = Files.newBufferedReader(path);
+        System.out.println(path);
 
-		//Ler o ficheiro linha a linha e enviar as linhas para o Buffer
-		String tmp;
-		while ((tmp = brr.readLine()) != null){
-			insertStr(tmp);
-			insertLn();
-		}
+        //Ler o ficheiro linha a linha e enviar as linhas para o Buffer
+        String tmp;
+        while ((tmp = brr.readLine()) != null){
+            insertStr(tmp);
+            insertLn();
+        }
 
-		//Volar a colocar o cursor na posição 0,0 após preencher o Buffer(o que levaria o cursor a ir para o fim do buffer)
-		Cursor curtmp = new Cursor(0,0);
-		setCursor(curtmp);
+        //Volar a colocar o cursor na posição 0,0 após preencher o Buffer(o que levaria o cursor a ir para o fim do buffer)
+        Cursor curtmp = new Cursor(0,0);
+        setCursor(curtmp);
 
-		modified = true;
+        modified = true;
 
-		brr.close();
+        brr.close();
 
-	}
+    }
 
 
-	@Override
-	public void insertChar(char c) {
-		super.insertChar(c);
-		modified = true; // marcar modificação
-	}
+    @Override
+    public void insertChar(char c) {
+        super.insertChar(c);
+        modified = true; // marcar modificação
+    }
 
-	@Override
-	public void deleteChar() {
-		super.deleteChar();
-		modified = true; // marcar modificação
-	}
+    @Override
+    public void deleteChar() {
+        super.deleteChar();
+        modified = true; // marcar modificação
+    }
 
 }
