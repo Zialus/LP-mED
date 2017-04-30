@@ -353,9 +353,9 @@ public class BufferView {
     private int[] viewPos(int line, int col){
         int[] vector = new int[3] ;
         int row = fbuffer.startRow; // Linha logica inicial a considerar
-        int vis = 0;        // Linha visual inicial a considerar
-        int r = 0;          // Quantidade de caracteres na ultima linha
-        int q = 0;          // Quantidade de linhas visuais completas que uma linha logica ocupa
+        int vis = 0;                // Linha visual inicial a considerar
+        int r;                      // Quantidade de caracteres na ultima linha
+        int q;                      // Quantidade de linhas visuais completas que uma linha logica ocupa
 
 
         while( vis<height &&  row<line ) {

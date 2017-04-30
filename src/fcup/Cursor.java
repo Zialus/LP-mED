@@ -33,8 +33,7 @@ public class Cursor {
 
         Cursor cursor = (Cursor) o;
 
-        if (l != cursor.l) return false;
-        return c == cursor.c;
+        return l == cursor.l && c == cursor.c;
     }
 
     @Override
