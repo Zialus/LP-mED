@@ -1,3 +1,4 @@
-out
-.idea
-lib
+
+.idea/
+lib/
+out/
