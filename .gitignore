@@ -1,4 +1,6 @@
-
 .idea/
 lib/
 out/
+build/
+.gradle/
+gradle*
