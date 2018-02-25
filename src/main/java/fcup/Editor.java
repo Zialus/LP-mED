@@ -33,7 +33,7 @@ public class Editor {
         System.out.println(lista.toString());
         BufferView buff = new BufferView(lista);
 
-        buff.StartTerm();
+        buff.startTerm();
 
     }
 }

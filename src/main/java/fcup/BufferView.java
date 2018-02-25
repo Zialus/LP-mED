@@ -45,7 +45,7 @@ public class BufferView {
         }
     }
 
-    public void StartTerm() throws IOException {
+    public void startTerm() throws IOException {
         term.enterPrivateMode();
 
         refreshAfterLine(0);
@@ -187,8 +187,6 @@ public class BufferView {
                                             break;
                                         case DeleteLine:
                                             fbuffer.insertLn();
-                                            break;
-                                        default:
                                             break;
                                     }
 
@@ -372,7 +370,7 @@ public class BufferView {
 
         StringBuilder sb = fbuffer.getNthLine(line);
         int tamanho = sb.length();
-        r = tamanho%width;
+        //r = tamanho%width;
         q = tamanho/width ;
 
         if(vis==height-1){

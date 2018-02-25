@@ -30,7 +30,7 @@ public class Testar {
         System.out.println(lista.toString());
         BufferView buff = new BufferView(lista);
 
-        buff.StartTerm();
+        buff.startTerm();
 
         System.out.println("-----------Testar buffer vazio----------");
         test_empty_buffer();
