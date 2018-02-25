@@ -1,10 +1,10 @@
 package fcup;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Buffer {
 
-    private LinkedList<StringBuilder> lineList = new LinkedList<>();
+    private ArrayList<StringBuilder> lineList = new ArrayList<>();
     private Cursor currentCursor = new Cursor (0,0);
     private int beginMarkRow, beginMarkCol; // inicio de marcação para clipboard
     private int endMarkRow, endMarkCol; // fim de marcação para clipboard
@@ -61,7 +61,7 @@ public class Buffer {
         return lineList.get(i);
     }
 
-    public LinkedList<StringBuilder> getAllLines(){
+    public ArrayList<StringBuilder> getAllLines(){
         return lineList;
     }
 

@@ -5,12 +5,12 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 public class FileBuffer extends Buffer {
     private Path savePath;
     private boolean modified;
-    public Stack<Command> commandList = new Stack<>();
+    public ArrayDeque<Command> commandList = new ArrayDeque<>();
     public int startRow;                   					// Primeira linha logica que aparece na janela
     public int lastRow;                                     // Ultima linha logica que aparece na janela
 

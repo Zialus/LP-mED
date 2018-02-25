@@ -1,12 +1,12 @@
 package fcup;
 
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
+
 import java.io.IOException;
 import java.util.ArrayList;
-
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.TerminalSize;
 
 public class BufferView {
     private Terminal term;
@@ -98,7 +98,7 @@ public class BufferView {
 
                         Command commandE = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
 
-                        fbuffer.commandList.push(commandE);
+                        fbuffer.commandList.addFirst(commandE);
 
 
                         fbuffer.setModified(true);
@@ -120,14 +120,14 @@ public class BufferView {
                             char c = tmp.charAt(cursorColuna-1);
                             fbuffer.deleteChar(); // Apagar esse "caracter"
                             Command commandB = new Command(Type.DeleteChar, fbuffer.getCursor(),c);
-                            fbuffer.commandList.push(commandB);
+                            fbuffer.commandList.addFirst(commandB);
                         }
 
                         else{ // Se estiver mesmo a apagar a linha em si
                             char c = ' ';
                             fbuffer.deleteChar(); // Apagar esse "caracter"
                             Command commandB = new Command(Type.DeleteLine, fbuffer.getCursor(),c);
-                            fbuffer.commandList.push(commandB);
+                            fbuffer.commandList.addFirst(commandB);
                         }
 
 
@@ -169,8 +169,8 @@ public class BufferView {
                             // CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
                             if(k.getCharacter() == 'z'){
                                 System.out.println("ENTROU NO UNDO");
-                                if (!fbuffer.commandList.empty()) {
-                                    Command command = fbuffer.commandList.pop(); // ir buscar ultimo comando guardado
+                                if (!fbuffer.commandList.isEmpty()) {
+                                    Command command = fbuffer.commandList.removeFirst(); // ir buscar ultimo comando guardado
 
                                     fbuffer.setCursor(command.cursor);
                                     int linhaActual99 = fbuffer.getCursor().getL();
@@ -244,7 +244,7 @@ public class BufferView {
 
                             Command commandI = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
 
-                            fbuffer.commandList.push(commandI);
+                            fbuffer.commandList.addFirst(commandI);
 
                         }
                         break;
