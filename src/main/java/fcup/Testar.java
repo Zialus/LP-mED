@@ -1,5 +1,6 @@
 package fcup;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -7,36 +8,10 @@ import java.util.ArrayList;
 
 public class Testar {
 
-    public static void main(String[] args) throws IOException {
+    public static void main() {
 
-        //Path path = FileSystems.getDefault().getPath(args[0]);
-
-        ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
-
-        for (String arg : args) {
-            Path path = FileSystems.getDefault().getPath(arg);
-            FileBuffer fb = new FileBuffer(path);
-
-            try {
-                fb.open(path);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            lista.add(fb);
-        }
-
-        System.out.println(lista.toString());
-        BufferView buff = new BufferView(lista);
-
-        buff.startTerm();
-
-        System.out.println("-----------Testar buffer vazio----------");
-        test_empty_buffer();
-
-        System.out.println("-----------Testar buffer nao vazio------");
-        test_complex_buffer();
+        System.out.println("-----------Testar Geral-----------------");
+        test_geral();
 
         System.out.println("-----------Testar Move Prev-------------");
         test_move_prev();
@@ -47,61 +22,46 @@ public class Testar {
         System.out.println("-----------Testar Delete Char-----------");
         test_delete_char();
 
-        System.out.println("-----------Testar Insert Char-----------");
-        test_insert_char();
-
     }
 
-    private static void test_insert_char() {
-        Buffer buff_teste = new Buffer("123456789abcdef");
-        Cursor cursor1 = new Cursor(0,5);
-        buff_teste.setCursor(cursor1);
-        buff_teste.insertChar('\n');
+    private static void test_geral() {
+        ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
 
-        System.out.println(buff_teste.getNthLine(0));
-        System.out.println(buff_teste.getNthLine(1));
-        System.out.println(buff_teste.getNthLine(2));
-        System.out.println("------------");
 
-        Cursor cursor2 = new Cursor(1,1);
-        buff_teste.setCursor(cursor2);
+        File temp = null;
+        try {
+            temp = File.createTempFile("temp-file-name", ".tmp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Temp file : " + temp.getAbsolutePath());
 
-        buff_teste.insertChar('#');
-        buff_teste.insertChar('#');
-        buff_teste.insertChar('#');
+        Path path = temp.toPath();
 
-        System.out.println(buff_teste.getNthLine(0));
-        System.out.println(buff_teste.getNthLine(1));
-        System.out.println(buff_teste.getNthLine(2));
-        System.out.println("------------");
+        FileBuffer fb = new FileBuffer(path);
 
-        Cursor cursor3 = new Cursor(1,2);
-        buff_teste.setCursor(cursor3);
-        buff_teste.insertChar('\n');
+        try {
+            fb.open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println(buff_teste.getNthLine(0));
-        System.out.println(buff_teste.getNthLine(1));
-        System.out.println(buff_teste.getNthLine(2));
-        System.out.println(buff_teste.getNthLine(3));
-        System.out.println("------------");
+        lista.add(fb);
 
-    }
+        System.out.println(lista);
 
-    private static void test_empty_buffer() {
-        //Buffer buff_teste = new Buffer();
-        //StringBuilder sb1 = buff_teste.LineList.get(0);
-        //System.out.println(buff_teste.LineList.get(1));
-        //StringBuilder sb2 = new StringBuilder("");
+        BufferView buff = null;
+        try {
+            buff = new BufferView(lista);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        //assert sb1.toString().equals(sb2.toString());
-
-    }
-
-    private static void test_complex_buffer() {
-        //Buffer buff_teste = new Buffer("123456789abcdef");
-        //System.out.println(buff_teste.LineList.get(0));
-        //System.out.println(buff_teste.LineList.get(1));
-        //System.out.println(buff_teste.LineList.get(2));
+        try {
+            buff.startTerm();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void test_move_prev() {
