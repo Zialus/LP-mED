@@ -9,7 +9,7 @@ public class Buffer {
     private int beginMarkRow, beginMarkCol; // inicio de marcação para clipboard
     private int endMarkRow, endMarkCol; // fim de marcação para clipboard
     private boolean marked = false;
-    private StringBuilder clipboard;
+    private StringBuilder clipboard = new StringBuilder();
 
     public void setBeginMark(int line, int col){
         beginMarkRow = line;
@@ -32,10 +32,51 @@ public class Buffer {
 
     public void copy(){
 
+        final int firstLine = beginMarkRow;
+        final int lastLine = endMarkRow;
+
+        final int firstCol = beginMarkCol;
+        final int lastCol = endMarkCol;
+
+        clipboard = new StringBuilder();
+
+        int lineWhereIamAt = firstLine;
+
+        if (lastLine == firstLine) {  // Case where there is only one line
+            StringBuilder sb1 = lineList.get(lineWhereIamAt);
+            String st1 = sb1.substring(firstCol, lastCol);
+            clipboard.append(st1);
+            unsetMarks();
+            return;
+        }
+
+        while (lastLine > lineWhereIamAt) { // General Case
+            StringBuilder sb2 = lineList.get(lineWhereIamAt);
+            String st2 = sb2.substring(0, sb2.length());
+            clipboard.append(st2);
+            lineWhereIamAt+=1;
+        }
+
+        // Deal with the last line
+        StringBuilder sb3 = lineList.get(lastLine);
+        String st3 = sb3.substring(0, lastCol);
+        clipboard.append(st3);
+
+        unsetMarks();
+
     }
 
     public void paste(){
+        String[] stringsToInsert = clipboard.toString().split("\n");
 
+        if (stringsToInsert.length == 0){
+            insertStr(stringsToInsert[0]);
+        } else {
+            for (String s: stringsToInsert) {
+                insertStr(s);
+                insertLn();
+            }
+        }
     }
 
 
