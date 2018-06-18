@@ -67,7 +67,9 @@ public class BufferTest {
     public void testEmptyBuffer() {
         Buffer b = new Buffer();
         assertEquals("", b.getNthLine(0).toString());
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(1));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            StringBuilder nthLine = b.getNthLine(1);
+        });
 
     }
 
@@ -76,7 +78,9 @@ public class BufferTest {
         Buffer b = new Buffer("123456789abcdef");
         assertEquals("123456789abcdef", b.getNthLine(0).toString());
         assertEquals("", b.getNthLine(1).toString());
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            StringBuilder nthLine = b.getNthLine(2);
+        });
     }
 
 }

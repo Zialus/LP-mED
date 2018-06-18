@@ -33,6 +33,7 @@ public class Testar {
             temp = File.createTempFile("temp-file-name", ".tmp");
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         System.out.println("Temp file : " + temp.getAbsolutePath());
 
@@ -55,6 +56,7 @@ public class Testar {
             buff = new BufferView(lista);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
 
         try {
