@@ -1,5 +1,7 @@
 # Med: um mini editor de texto
 
+[![Build status](https://ci.appveyor.com/api/projects/status/dip19y7lw8662i6o?svg=true)](https://ci.appveyor.com/project/Zialus/lp-med)
+
 ## Trabalho 2 - Laboratórios de Programação (MIERSI-FCUP).
 
 ### Utilização
