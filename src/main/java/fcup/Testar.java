@@ -7,18 +7,13 @@ import java.util.ArrayList;
 
 public class Testar {
 
-    public static void main() {
+    public static void main(String[] args) {
 
-        System.out.println("-----------Testar Geral-----------------");
-        test_geral();
+        System.out.println("-----------Just testing---------------");
 
-    }
-
-    private static void test_geral() {
         ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
 
-
-        File temp = null;
+        File temp;
         try {
             temp = File.createTempFile("temp-file-name", ".tmp");
         } catch (IOException e) {
@@ -41,7 +36,7 @@ public class Testar {
 
         System.out.println(lista);
 
-        BufferView buff = null;
+        BufferView buff;
         try {
             buff = new BufferView(lista);
         } catch (IOException e) {

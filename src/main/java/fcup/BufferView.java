@@ -58,7 +58,7 @@ public class BufferView {
             if (k != null) {
                 switch (k.getKeyType()) {
                     case Escape:
-                        term.exitPrivateMode();
+                        this.endTerm();
                         return;
                     case ArrowLeft:
                         fbuffer.movePrev();
@@ -266,6 +266,10 @@ public class BufferView {
                 ie.printStackTrace();
             }
         }
+    }
+
+    public void endTerm() throws IOException {
+        term.exitPrivateMode();
     }
 
 
