@@ -57,7 +57,7 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'fcup.Game'
+                'Main-Class': 'fcup.Editor'
         )
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
