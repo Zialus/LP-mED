@@ -29,3 +29,14 @@ jobs:
     - os: osx
       jdk: openjdk8
     - jdk: openjdk15
+
+  include:
+    - name: Sonar
+      os: linux
+      jdk: openjdk11
+      addons:
+        sonarcloud:
+          organization: "zialus-github"
+          token:
+            secure: "Y1pjjRE/LgBiEgLbleOgZCUmIgpVKTMbEtx78dKLUaowt5aP4cb6yhWTC6lMTAO/4rOF2qQ5j6UF6dVuUWeMRyuxNFhx9fNgt1XvkPzI4HKhSu8/YJr+7+MR872agovxoHaVFfDfWbhFr4Xb401dRbEx2180PTn/m85EdX3bo4LeEkEZGdyfZm2xu6hg4XZ+QxCKSiWf0xRE4Sp7T3ZtwBsdGnJ2PBvWA3Ez9kuYISxcfdKinXriPBKFMy5mmbeiph1GY0PIkyLCp1KDhZmOyw4DD7P/QEpSZhdJQ5XcDWTea1Bn3hExNBt4Hj/aOizK5Yf8PvMsWlGmvUAU4QhPj9b+aZ6rQA08sE8kED+JJphSZGqUKpBB8UcS15Z+xtCZjuRY1oMG9NAZultWr//CBaNDLmBvienIPKJX8kPnXGQuagDqsogEXVUSTtPSUCpJauZTsI4gu++fBIhWYorvkUgV52KGKhpDY7bcbZWgJbH8sol7sn/icNeJUm4LqHJpGg8YrdhrzF+qLoHZ6DswE2ZRlOA4xFpaGv2jUGleZtx/AViE8x3v8YRnXlEg9kJpYpyCgg95itAveDzWck+dhzV+OeVMeu7KZedCYHLXOE8lRzdnDq8muZPCtBdbCYB8pN7IfxQFX9W5ccBG6uT+OzhNvFFvkETm2V7vj3qOjdk="
+      script: gradle sonarqube
