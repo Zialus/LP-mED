@@ -122,14 +122,12 @@ public class Buffer {
     }
 
     public void setCursor(Cursor newCursor){
-        int l = newCursor.getL();
-        int c = newCursor.getC();
-
         if ( validPosition(newCursor)){
-            currentCursor.setL(l);
-            currentCursor.setC(c);
+            currentCursor = newCursor;
         }
         else{
+            int l = newCursor.getL();
+            int c = newCursor.getC();
             System.out.println("Buffer.setCursor - Invalid Position -" + " l: " + l + " c: " + c);
         }
     }
@@ -140,7 +138,7 @@ public class Buffer {
         int c = currentCursor.getC();
 
         if ( c > 0){
-            currentCursor.setC(c-1);
+            currentCursor = new Cursor(l, c-1);
         }
         else if( l > 0){
             currentCursor = new Cursor(l-1, lineList.get(l-1).length());
@@ -159,7 +157,7 @@ public class Buffer {
         int len = lineList.get(l).length();
 
         if ( c < len ){
-            currentCursor.setC(c+1);
+            currentCursor = new Cursor(l, c+1);
         }
         else if( l+1 < getNumLines()){
             currentCursor = new Cursor(l+1, 0);
