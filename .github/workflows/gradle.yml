@@ -66,5 +66,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         uses: eskatos/gradle-command-action@v1
         with:
-          arguments: build sonarqube --info
+          arguments: build jacocoTestReport sonarqube --info
           gradle-version: current
