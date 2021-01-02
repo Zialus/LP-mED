@@ -84,7 +84,7 @@ jar {
 
 pitest {
     junit5PluginVersion = '0.12'
-    pitestVersion = '1.6.1'
+    pitestVersion = '1.6.2'
     mutators = ["ALL"]
 }
 
