@@ -1,5 +1,7 @@
 package fcup;
 
+import lombok.extern.java.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 
+@Log
 public class FileBuffer extends Buffer {
     private Path savePath;
     private boolean modified;
@@ -36,11 +39,11 @@ public class FileBuffer extends Buffer {
         BufferedWriter brw =  Files.newBufferedWriter(path);
 
         int numLines = getNumLines();
-        // System.out.println("numLines" + numLines);
+        // log.info("numLines" + numLines);
 
         for (int i=0; i<numLines; i++) {
             StringBuilder sb = getNthLine(i);
-            // System.out.println("linha " + i + ": "+ sb.toString());
+            // log.info("linha " + i + ": "+ sb.toString());
             brw.write(sb.toString());
             brw.write("\n");
         }
@@ -52,7 +55,7 @@ public class FileBuffer extends Buffer {
     public void open(Path path) throws IOException {
 
         BufferedReader brr = Files.newBufferedReader(path);
-        System.out.println(path);
+        log.info("File Path: " + path);
 
         //Ler o ficheiro linha a linha e enviar as linhas para o Buffer
         String tmp;

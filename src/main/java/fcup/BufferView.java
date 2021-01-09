@@ -4,10 +4,12 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Log
 public class BufferView {
     private Terminal term;
     private FileBuffer fbuffer;                                   // FileBuffer associado ao terminal neste momento
@@ -145,30 +147,30 @@ public class BufferView {
                         break;
                     case Character:
                         if(k.isCtrlDown()){
-                            System.out.println("ENTROU NO CONTROL");
+                            log.info("ENTROU NO CONTROL");
 
                             if(k.getCharacter() == 's'){
-                                System.out.println("ENTROU NO SAVE");
+                                log.info("ENTROU NO SAVE");
                                 fbuffer.setModified(true);
                                 fbuffer.save();
-                                System.out.println("FEZ SAVE");
+                                log.info("FEZ SAVE");
                             }
 
                             if(k.getCharacter() == 'b'){
-                                System.out.println("ENTROU NO NEXT BUFFER");
+                                log.info("ENTROU NO NEXT BUFFER");
                                 int sizeCircList = bufferList.size();
                                 currentBuffer = (currentBuffer+1)%sizeCircList;
                                 fbuffer = bufferList.get(currentBuffer);
                                 fbuffer.setModified(true);
                                 term.clearScreen();
-                                System.out.println("Movi-me para o next Buffer");
+                                log.info("Movi-me para o next Buffer");
                                 refreshAfterLine(fbuffer.startRow);
                             }
 
 
                             // CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
                             if(k.getCharacter() == 'z'){
-                                System.out.println("ENTROU NO UNDO");
+                                log.info("ENTROU NO UNDO");
                                 if (!fbuffer.commandList.isEmpty()) {
                                     Command command = fbuffer.commandList.removeFirst(); // ir buscar ultimo comando guardado
 
@@ -209,7 +211,7 @@ public class BufferView {
 
                                 }
                                 else {
-                                    System.out.println("Nada a disfazer!");
+                                    log.info("Nada a disfazer!");
                                 }
 
 
@@ -219,16 +221,16 @@ public class BufferView {
                         }
 
                         else if(k.isAltDown() ){
-                            System.out.println("ENTROU NO ALT");
+                            log.info("ENTROU NO ALT");
                             if(k.getCharacter() == 'b'){
-                                System.out.println("prev buffer");
+                                log.info("prev buffer");
                                 int sizeCircList = bufferList.size();
                                 currentBuffer = (currentBuffer-1);
                                 if (currentBuffer == -1) { currentBuffer = sizeCircList-1;}
                                 fbuffer = bufferList.get(currentBuffer);
                                 fbuffer.setModified(true);
                                 term.clearScreen();
-                                System.out.println("Movi-me para o prev Buffer");
+                                log.info("Movi-me para o prev Buffer");
                                 refreshAfterLine(fbuffer.startRow);
                             }
                         }
@@ -275,11 +277,11 @@ public class BufferView {
 
     private void redraw() throws IOException {
 
-        //System.out.println(Arrays.toString(modifiedLines.toArray()));
+        //log.info(Arrays.toString(modifiedLines.toArray()));
 
         for (Integer line : modifiedLines) {
             if (line>=0) {
-                //System.out.println("linha: " + line + " starRow: " + fbuffer.startRow);
+                //log.info("linha: " + line + " starRow: " + fbuffer.startRow);
                 drawN(line);
             }
         }
@@ -289,14 +291,14 @@ public class BufferView {
         int cursorL = fbuffer.getCursor().getL();
         int cursorC = fbuffer.getCursor().getC();
 
-        //System.out.println("posicoes logicas do cursor: " + cursorL + "," + cursorC);
+        //log.info("posicoes logicas do cursor: " + cursorL + "," + cursorC);
 
         int[] pos = viewPos(cursorL,cursorC);
         int line = pos[0]; int row = pos[2];
         cursorRow = row;
         cursorLine = line;
 
-        //System.out.println("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
+        //log.info("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
         term.setCursorPosition(cursorRow,cursorLine);
 
         fbuffer.setModified(false);
@@ -365,7 +367,7 @@ public class BufferView {
             int tamanho = sb.length();
 
             q = tamanho/width ;
-            //System.out.println("tamanho logico da linha: " + row + " " + tamanho);
+            //log.info("tamanho logico da linha: " + row + " " + tamanho);
             r = tamanho%width;
             if(r==0) {vis+= Math.max(q,1);}
             else {vis += q+1;}
@@ -387,7 +389,7 @@ public class BufferView {
         }
 
 
-        //System.out.println("line " + line + " v: " + vis + " r: " + r + " q " + q);
+        //log.info("line " + line + " v: " + vis + " r: " + r + " q " + q);
         vector[0] = vis; // posicao que a linha logica vai ter na janela
         vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
 

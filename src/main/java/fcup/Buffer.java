@@ -1,7 +1,10 @@
 package fcup;
 
+import lombok.extern.java.Log;
+
 import java.util.ArrayList;
 
+@Log
 public class Buffer {
 
     private ArrayList<StringBuilder> lineList = new ArrayList<>();
@@ -126,9 +129,7 @@ public class Buffer {
             currentCursor = newCursor;
         }
         else{
-            int l = newCursor.getL();
-            int c = newCursor.getC();
-            System.out.println("Buffer.setCursor - Invalid Position -" + " l: " + l + " c: " + c);
+            log.info("Invalid Cursor Position: " + newCursor);
         }
     }
 
@@ -144,7 +145,7 @@ public class Buffer {
             currentCursor = new Cursor(l-1, lineList.get(l-1).length());
         }
         else{
-            System.out.println("Already at the begining");
+            log.info("Cursor already at the beginning");
         }
 
     }
@@ -163,7 +164,7 @@ public class Buffer {
             currentCursor = new Cursor(l+1, 0);
         }
         else{
-            System.out.println("Already at the end");
+            log.info("Cursor already at the end");
         }
 
     }
@@ -176,7 +177,7 @@ public class Buffer {
             currentCursor = new Cursor(l-1, Math.min(c, lineList.get(l-1).length() ));
         }
         else{
-            System.out.println("Already at the first line of the buffer");
+            log.info("Cursor already at the first line of the buffer");
         }
     }
 
@@ -190,7 +191,7 @@ public class Buffer {
             currentCursor = new Cursor(l,tamanho-1);
         }
         else{
-            System.out.println("Already at the end of the line");
+            log.info("Cursor already at the end of the line");
         }
     }
 
@@ -202,7 +203,7 @@ public class Buffer {
             currentCursor = new Cursor(l,0);
         }
         else{
-            System.out.println("Already at the begining of the line");
+            log.info("Cursor already at the beginning of the line");
         }
     }
 
@@ -214,7 +215,7 @@ public class Buffer {
             currentCursor = new Cursor(l+1, Math.min(c, lineList.get(l+1).length() ));
         }
         else{
-            System.out.println("Already at the last line of the buffer");
+            log.info("Cursor already at the last line of the buffer");
         }
     }
 
@@ -271,7 +272,7 @@ public class Buffer {
             deleteLn();
         }
         else{
-            System.out.println("Already at the beginning of the buffer");
+            log.info("Cursor already at the beginning of the buffer");
         }
 
     }

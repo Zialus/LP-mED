@@ -1,15 +1,18 @@
 package fcup;
 
+import lombok.extern.java.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+@Log
 public class Testar {
 
     public static void main(String[] args) {
 
-        System.out.println("-----------Just testing---------------");
+        log.info("---------------Just testing---------------");
 
         ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
 
@@ -20,7 +23,7 @@ public class Testar {
             e.printStackTrace();
             return;
         }
-        System.out.println("Temp file : " + temp.getAbsolutePath());
+        log.info("Temp file: " + temp.getAbsolutePath());
 
         Path path = temp.toPath();
 
@@ -34,7 +37,7 @@ public class Testar {
 
         lista.add(fb);
 
-        System.out.println(lista);
+        log.info("File List: " + lista);
 
         BufferView buff;
         try {
