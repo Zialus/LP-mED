@@ -1,2 +1,2 @@
 package fcup;
-public enum Type {DeleteChar,DeleteLine,InsertChar,InsertLn}
+public enum Type {DELETE_CHAR, DELETE_LINE, INSERT_CHAR, INSERT_LN}

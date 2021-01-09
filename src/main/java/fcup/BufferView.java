@@ -98,7 +98,7 @@ public class BufferView {
                             fbuffer.startRow = Math.min(fbuffer.startRow+10,fbuffer.lastRow);
                         }
 
-                        Command commandE = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
+                        Command commandE = new Command(Type.INSERT_CHAR, fbuffer.getCursor(),' ');
 
                         fbuffer.commandList.addFirst(commandE);
 
@@ -121,14 +121,14 @@ public class BufferView {
                         if(cursorColuna>0){ // Se a apagar alguma coisa na linha, mas a linha continuar "viva"
                             char c = tmp.charAt(cursorColuna-1);
                             fbuffer.deleteChar(); // Apagar esse "caracter"
-                            Command commandB = new Command(Type.DeleteChar, fbuffer.getCursor(),c);
+                            Command commandB = new Command(Type.DELETE_CHAR, fbuffer.getCursor(),c);
                             fbuffer.commandList.addFirst(commandB);
                         }
 
                         else{ // Se estiver mesmo a apagar a linha em si
                             char c = ' ';
                             fbuffer.deleteChar(); // Apagar esse "caracter"
-                            Command commandB = new Command(Type.DeleteLine, fbuffer.getCursor(),c);
+                            Command commandB = new Command(Type.DELETE_LINE, fbuffer.getCursor(),c);
                             fbuffer.commandList.addFirst(commandB);
                         }
 
@@ -178,16 +178,16 @@ public class BufferView {
                                     int linhaActual99 = fbuffer.getCursor().getL();
 
                                     switch (command.tipo){
-                                        case InsertChar:
+                                        case INSERT_CHAR:
                                             fbuffer.deleteChar();
                                             break;
-                                        case DeleteChar:
+                                        case DELETE_CHAR:
                                             fbuffer.insertChar(command.caracter);
                                             break;
-                                        case InsertLn:
+                                        case INSERT_LN:
                                             fbuffer.deleteChar();
                                             break;
-                                        case DeleteLine:
+                                        case DELETE_LINE:
                                             fbuffer.insertLn();
                                             break;
                                     }
@@ -242,7 +242,7 @@ public class BufferView {
                             fbuffer.setModified(true);
                             modifiedLines.add(linhaActual3);
 
-                            Command commandI = new Command(Type.InsertChar, fbuffer.getCursor(),' ');
+                            Command commandI = new Command(Type.INSERT_CHAR, fbuffer.getCursor(),' ');
 
                             fbuffer.commandList.addFirst(commandI);
 
