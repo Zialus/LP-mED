@@ -14,10 +14,14 @@ public class BufferView {
     private Terminal term;
     private FileBuffer fbuffer;                                   // FileBuffer associado ao terminal neste momento
     private int currentBuffer;                                    // Indice do Buffer que está a ser editado neste momento
-    private int width, height;                                    // Altura e largura da janela com o terminal
+    // Altura e largura da janela com o terminal
+    private int width;
+    private int height;
     private ArrayList<FileBuffer> bufferList = new ArrayList<>(); // Lista com os varios Buffers
     private ArrayList<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
-    private int cursorLine,cursorRow;                             // Linha e coluna visual do cursor
+    // Linha e coluna visual do cursor
+    private int cursorLine;
+    private int cursorRow;
 
 
     // Constuir um BufferView só com um buffer
@@ -294,7 +298,8 @@ public class BufferView {
         //log.info("posicoes logicas do cursor: " + cursorL + "," + cursorC);
 
         int[] pos = viewPos(cursorL,cursorC);
-        int line = pos[0]; int row = pos[2];
+        int line = pos[0];
+        int row = pos[2];
         cursorRow = row;
         cursorLine = line;
 

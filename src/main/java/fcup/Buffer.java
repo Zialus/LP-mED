@@ -9,8 +9,12 @@ public class Buffer {
 
     private ArrayList<StringBuilder> lineList = new ArrayList<>();
     private Cursor currentCursor = new Cursor (0,0);
-    private int beginMarkRow, beginMarkCol; // inicio de marcação para clipboard
-    private int endMarkRow, endMarkCol; // fim de marcação para clipboard
+    // inicio de marcação para clipboard
+    private int beginMarkRow;
+    private int beginMarkCol;
+    // fim de marcação para clipboard
+    private int endMarkRow;
+    private int endMarkCol;
     private boolean marked = false;
     private StringBuilder clipboard = new StringBuilder();
 
