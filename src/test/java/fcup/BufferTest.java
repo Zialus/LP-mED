@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BufferTest {
+class BufferTest {
 
     @Test
-    public void testNewEmptyBuffer() {
+    void testNewEmptyBuffer() {
 
         Buffer b = new Buffer();
         assertEquals( 1, b.getNumLines());
@@ -17,7 +17,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testSetCursorToValidPosition(){
+    void testSetCursorToValidPosition(){
 
         Buffer b = new Buffer("xalala");
         b.setCursor(new Cursor(0,3));
@@ -26,7 +26,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testInsertChar() {
+    void testInsertChar() {
 
         Buffer b = new Buffer("123456789abcdef");
         Cursor c1 = new Cursor(0,5);
@@ -64,7 +64,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testEmptyBuffer() {
+    void testEmptyBuffer() {
         Buffer b = new Buffer();
         assertEquals("", b.getNthLine(0).toString());
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
@@ -74,7 +74,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testComplexBuffer() {
+    void testComplexBuffer() {
         Buffer b = new Buffer("123456789abcdef");
         assertEquals("123456789abcdef", b.getNthLine(0).toString());
         assertEquals("", b.getNthLine(1).toString());
@@ -84,7 +84,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testMovePrev() {
+    void testMovePrev() {
         Buffer b = new Buffer("123456789abcdef");
 
         Cursor c1 = new Cursor(0, 2);
@@ -130,7 +130,7 @@ public class BufferTest {
     }
 
     @Test
-    public void testMoveNext() {
+    void testMoveNext() {
         Buffer b = new Buffer("123456789abcdef");
 
         Cursor c1 = new Cursor(0, 13);
@@ -180,7 +180,7 @@ public class BufferTest {
     }
 
     @Test
-    public void test_delete_char() {
+    void test_delete_char() {
         Buffer b = new Buffer("123456789abcdef");
         Cursor cursor1 = new Cursor(0, 11);
         b.setCursor(cursor1);
