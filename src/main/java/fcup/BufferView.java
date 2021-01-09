@@ -8,6 +8,8 @@ import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Log
 public class BufferView {
@@ -17,8 +19,8 @@ public class BufferView {
     // Altura e largura da janela com o terminal
     private int width;
     private int height;
-    private ArrayList<FileBuffer> bufferList = new ArrayList<>(); // Lista com os varios Buffers
-    private ArrayList<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
+    private List<FileBuffer> bufferList = new ArrayList<>(); // Lista com os varios Buffers
+    private List<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
     // Linha e coluna visual do cursor
     private int cursorLine;
     private int cursorRow;
@@ -35,7 +37,7 @@ public class BufferView {
     }
 
     // Constuir um BufferView com multiplos buffers
-    public BufferView(ArrayList<FileBuffer> bufferList) throws IOException {
+    public BufferView(List<FileBuffer> bufferList) throws IOException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         term = defaultTerminalFactory.createTerminal();
         TerminalSize sizeTerm = term.getTerminalSize();
@@ -270,6 +272,7 @@ public class BufferView {
             catch (InterruptedException ie)
             {
                 ie.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -281,11 +284,11 @@ public class BufferView {
 
     private void redraw() throws IOException {
 
-        //log.info(Arrays.toString(modifiedLines.toArray()));
+        log.finest(Arrays.toString(modifiedLines.toArray()));
 
         for (Integer line : modifiedLines) {
             if (line>=0) {
-                //log.info("linha: " + line + " starRow: " + fbuffer.startRow);
+                log.finest("linha: " + line + " starRow: " + fbuffer.getStartRow());
                 drawN(line);
             }
         }
@@ -295,7 +298,7 @@ public class BufferView {
         int cursorL = fbuffer.getCursor().getL();
         int cursorC = fbuffer.getCursor().getC();
 
-        //log.info("posicoes logicas do cursor: " + cursorL + "," + cursorC);
+        log.finest("posicoes logicas do cursor: " + cursorL + "," + cursorC);
 
         int[] pos = viewPos(cursorL,cursorC);
         int line = pos[0];
@@ -303,7 +306,7 @@ public class BufferView {
         cursorRow = row;
         cursorLine = line;
 
-        //log.info("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
+        log.finest("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
         term.setCursorPosition(cursorRow,cursorLine);
 
         fbuffer.setModified(false);
@@ -372,7 +375,7 @@ public class BufferView {
             int tamanho = sb.length();
 
             q = tamanho/width ;
-            //log.info("tamanho logico da linha: " + row + " " + tamanho);
+            log.finest("tamanho logico da linha: " + row + " " + tamanho);
             r = tamanho%width;
             if(r==0) {vis+= Math.max(q,1);}
             else {vis += q+1;}
@@ -381,7 +384,7 @@ public class BufferView {
 
         StringBuilder sb = fbuffer.getNthLine(line);
         int tamanho = sb.length();
-        //r = tamanho%width;
+        r = tamanho%width;
         q = tamanho/width ;
 
         if(vis==height-1){
@@ -394,7 +397,7 @@ public class BufferView {
         }
 
 
-        //log.info("line " + line + " v: " + vis + " r: " + r + " q " + q);
+        log.finest("line " + line + " v: " + vis + " r: " + r + " q " + q);
         vector[0] = vis; // posicao que a linha logica vai ter na janela
         vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
 

@@ -3,6 +3,7 @@ package fcup;
 import lombok.extern.java.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Log
 public class Buffer {
@@ -109,7 +110,7 @@ public class Buffer {
         return lineList.get(i);
     }
 
-    public ArrayList<StringBuilder> getAllLines(){
+    public List<StringBuilder> getAllLines(){
         return lineList;
     }
 

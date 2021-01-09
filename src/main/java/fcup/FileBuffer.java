@@ -39,11 +39,11 @@ public class FileBuffer extends Buffer {
 
         try (BufferedWriter brw = Files.newBufferedWriter(path)) {
             int numLines = getNumLines();
-            // log.info("numLines" + numLines);
+            log.info("numLines: " + numLines);
 
             for (int i = 0; i < numLines; i++) {
                 StringBuilder sb = getNthLine(i);
-                // log.info("linha " + i + ": "+ sb.toString());
+                log.info("linha " + i + ": "+ sb.toString());
                 brw.write(sb.toString());
                 brw.write("\n");
             }
