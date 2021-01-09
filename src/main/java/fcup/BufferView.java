@@ -79,9 +79,9 @@ public class BufferView {
                         fbuffer.setModified(true);
 
                         if(cursorLine==height-1){
-                            fbuffer.startRow += 10;
+                            fbuffer.setStartRow(fbuffer.getStartRow() + 10);
                             term.clearScreen();
-                            refreshAfterLine(fbuffer.startRow);
+                            refreshAfterLine(fbuffer.getStartRow());
                         }
 
                         break;
@@ -89,9 +89,9 @@ public class BufferView {
                         fbuffer.movePrevLine();
                         fbuffer.setModified(true);
 
-                        if(cursorLine==0 && fbuffer.startRow != 0){
-                            fbuffer.startRow = Math.max(fbuffer.startRow-10, 0);
-                            refreshAfterLine(fbuffer.startRow);
+                        if(cursorLine==0 && fbuffer.getStartRow() != 0){
+                            fbuffer.setStartRow(Math.max(fbuffer.getStartRow()-10, 0));
+                            refreshAfterLine(fbuffer.getStartRow());
                         }
 
                         break;
@@ -99,20 +99,20 @@ public class BufferView {
                         fbuffer.insertLn(); // Inserir nova linha
 
                         if(cursorLine==height-1){
-                            fbuffer.startRow = Math.min(fbuffer.startRow+10,fbuffer.lastRow);
+                            fbuffer.setStartRow(Math.min(fbuffer.getStartRow()+10, fbuffer.getLastRow()));
                         }
 
                         Command commandE = new Command(Type.INSERT_CHAR, fbuffer.getCursor(),' ');
 
-                        fbuffer.commandList.addFirst(commandE);
+                        fbuffer.getCommandList().addFirst(commandE);
 
 
                         fbuffer.setModified(true);
-                        refreshAfterLine(fbuffer.startRow);
+                        refreshAfterLine(fbuffer.getStartRow());
                         break;
                     case Backspace:
-                        if(cursorLine==0 && fbuffer.startRow != 0){
-                            fbuffer.startRow = Math.max(fbuffer.startRow-10, 0);
+                        if(cursorLine==0 && fbuffer.getStartRow() != 0){
+                            fbuffer.setStartRow(Math.max(fbuffer.getStartRow()-10, 0));
                         }
 
 
@@ -126,19 +126,19 @@ public class BufferView {
                             char c = tmp.charAt(cursorColuna-1);
                             fbuffer.deleteChar(); // Apagar esse "caracter"
                             Command commandB = new Command(Type.DELETE_CHAR, fbuffer.getCursor(),c);
-                            fbuffer.commandList.addFirst(commandB);
+                            fbuffer.getCommandList().addFirst(commandB);
                         }
 
                         else{ // Se estiver mesmo a apagar a linha em si
                             char c = ' ';
                             fbuffer.deleteChar(); // Apagar esse "caracter"
                             Command commandB = new Command(Type.DELETE_LINE, fbuffer.getCursor(),c);
-                            fbuffer.commandList.addFirst(commandB);
+                            fbuffer.getCommandList().addFirst(commandB);
                         }
 
 
                         fbuffer.setModified(true);
-                        refreshAfterLine(Math.min(linhaActual2-1,fbuffer.startRow));
+                        refreshAfterLine(Math.min(linhaActual2-1, fbuffer.getStartRow()));
 
                         break;
                     case End:
@@ -168,15 +168,15 @@ public class BufferView {
                                 fbuffer.setModified(true);
                                 term.clearScreen();
                                 log.info("Movi-me para o next Buffer");
-                                refreshAfterLine(fbuffer.startRow);
+                                refreshAfterLine(fbuffer.getStartRow());
                             }
 
 
                             // CONTROL-Z  (DESFAZER ULTIMA ACÇÃO)
                             if(k.getCharacter() == 'z'){
                                 log.info("ENTROU NO UNDO");
-                                if (!fbuffer.commandList.isEmpty()) {
-                                    Command command = fbuffer.commandList.removeFirst(); // ir buscar ultimo comando guardado
+                                if (!fbuffer.getCommandList().isEmpty()) {
+                                    Command command = fbuffer.getCommandList().removeFirst(); // ir buscar ultimo comando guardado
 
                                     fbuffer.setCursor(command.cursor);
                                     int linhaActual99 = fbuffer.getCursor().getL();
@@ -199,14 +199,14 @@ public class BufferView {
                                     fbuffer.setModified(true);
 
 
-                                    if(fbuffer.startRow > linhaActual99){
-                                        fbuffer.startRow = Math.max(linhaActual99-10, 0);
-                                        refreshAfterLine(fbuffer.startRow);
+                                    if(fbuffer.getStartRow() > linhaActual99){
+                                        fbuffer.setStartRow(Math.max(linhaActual99-10, 0));
+                                        refreshAfterLine(fbuffer.getStartRow());
                                     }
 
-                                    if(linhaActual99 > fbuffer.lastRow){
-                                        fbuffer.startRow = Math.min(linhaActual99+10,fbuffer.getNumLines()-1);
-                                        refreshAfterLine(fbuffer.startRow);
+                                    if(linhaActual99 > fbuffer.getLastRow()){
+                                        fbuffer.setStartRow(Math.min(linhaActual99+10,fbuffer.getNumLines()-1));
+                                        refreshAfterLine(fbuffer.getStartRow());
                                     }
 
                                     else {refreshAfterLine(linhaActual99-1);}
@@ -235,7 +235,7 @@ public class BufferView {
                                 fbuffer.setModified(true);
                                 term.clearScreen();
                                 log.info("Movi-me para o prev Buffer");
-                                refreshAfterLine(fbuffer.startRow);
+                                refreshAfterLine(fbuffer.getStartRow());
                             }
                         }
 
@@ -248,7 +248,7 @@ public class BufferView {
 
                             Command commandI = new Command(Type.INSERT_CHAR, fbuffer.getCursor(),' ');
 
-                            fbuffer.commandList.addFirst(commandI);
+                            fbuffer.getCommandList().addFirst(commandI);
 
                         }
                         break;
@@ -337,7 +337,7 @@ public class BufferView {
 
         //Apagar linhas que ja nao existem
         if ( fbuffer.getNumLines()-1 == line ){
-            for(int j=initRow; j<fbuffer.lastRow; j++){
+            for(int j=initRow; j<fbuffer.getLastRow(); j++){
                 for (int i = 0; i < width; i++) {
                     term.putCharacter(' ');
                 }
@@ -361,7 +361,7 @@ public class BufferView {
 
     private int[] viewPos(int line, int col){
         int[] vector = new int[3] ;
-        int row = fbuffer.startRow; // Linha logica inicial a considerar
+        int row = fbuffer.getStartRow(); // Linha logica inicial a considerar
         int vis = 0;                // Linha visual inicial a considerar
         int r;                      // Quantidade de caracteres na ultima linha
         int q;                      // Quantidade de linhas visuais completas que uma linha logica ocupa
@@ -385,7 +385,7 @@ public class BufferView {
         q = tamanho/width ;
 
         if(vis==height-1){
-            fbuffer.lastRow = line;
+            fbuffer.setLastRow(line);
         }
 
         if (vis==height){

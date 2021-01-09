@@ -29,11 +29,7 @@ public class Testar {
 
         FileBuffer fb = new FileBuffer(path);
 
-        try {
-            fb.open(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fb.open(path);
 
         lista.add(fb);
 
