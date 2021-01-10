@@ -360,63 +360,55 @@ public class BufferView {
 
     }
 
-    private VisualPositionInfo viewPos(int line, int col){
-        int row = fbuffer.getStartRow(); // Linha logica inicial a considerar
-        int vis = 0;                // Linha visual inicial a considerar
-        int r;                      // Quantidade de caracteres na ultima linha
-        int q;                      // Quantidade de linhas visuais completas que uma linha logica ocupa
+    private VisualPositionInfo viewPos(int line, int col) {
+        int logicalLineToConsider = fbuffer.getStartRow();
+        int visualLineToConsider = 0;
 
+        while (visualLineToConsider < height && logicalLineToConsider < line) {
+            int logicalLineLength = fbuffer.getNthLine(logicalLineToConsider).length();
 
-        while( vis<height &&  row<line ) {
-            StringBuilder sb = fbuffer.getNthLine(row);
-            int tamanho = sb.length();
+            int numberOfFullVisualLinesOccupiedByLogicalLine = logicalLineLength / width;
+            log.finest("tamanho logico da linha: " + logicalLineToConsider + " " + logicalLineLength);
+            int numberOfCharsInLastVisualLine = logicalLineLength % width;
 
-            q = tamanho/width ;
-            log.finest("tamanho logico da linha: " + row + " " + tamanho);
-            r = tamanho%width;
-            if(r==0) {vis+= Math.max(q,1);}
-            else {vis += q+1;}
-            row++;
+            visualLineToConsider += numberOfCharsInLastVisualLine == 0 ? Math.max(numberOfFullVisualLinesOccupiedByLogicalLine, 1) : numberOfFullVisualLinesOccupiedByLogicalLine + 1;
+
+            logicalLineToConsider++;
         }
 
-        StringBuilder sb = fbuffer.getNthLine(line);
-        int tamanho = sb.length();
-        r = tamanho%width;
-        q = tamanho/width ;
+        int sizeOfLineWhereCursorIs = fbuffer.getNthLine(line).length();
+        final int charsInLastVisualLine = sizeOfLineWhereCursorIs % width;
+        final int fullVisualLinesOccupiedByLogicalLine = sizeOfLineWhereCursorIs / width;
 
-        log.finest("line " + line + " v: " + vis + " r: " + r + " q " + q);
+        log.finest("line " + line + " v: " + visualLineToConsider + " r: " + charsInLastVisualLine + " q " + fullVisualLinesOccupiedByLogicalLine);
 
-        if(vis==height-1){
+        if (visualLineToConsider == height - 1) {
             fbuffer.setLastRow(line);
         }
 
-        VisualPositionInfo vector;
-
-        if (vis==height){
-            vector = new VisualPositionInfo(-20, 0, 0);
-            return vector;
+        if (visualLineToConsider == height) {
+            return new VisualPositionInfo(-20, 0, 0);
         }
 
-        if(col==0){
-            vector = new VisualPositionInfo(vis, q, col);
+        if (col == 0) {
+            return new VisualPositionInfo(visualLineToConsider, fullVisualLinesOccupiedByLogicalLine, col);
         }
 
-        else if(col==width){
-            vector = new VisualPositionInfo(vis+col/width, q, col%width);
+        else if (col == width) {
+            return new VisualPositionInfo(visualLineToConsider + col / width, fullVisualLinesOccupiedByLogicalLine, col % width);
         }
 
-        else if(col%width==0){
-            vector = new VisualPositionInfo(vis+(col/width), q, 0);
+        else if (col % width == 0) {
+            return new VisualPositionInfo(visualLineToConsider + (col / width), fullVisualLinesOccupiedByLogicalLine, 0);
         }
 
-        else if(col>width){
-            vector = new VisualPositionInfo(vis+col/width, q, col%width);
+        else if (col > width) {
+            return new VisualPositionInfo(visualLineToConsider + col / width, fullVisualLinesOccupiedByLogicalLine, col % width);
         }
 
         else { // col<width
-            vector = new VisualPositionInfo(vis, q, col%width);
+            return new VisualPositionInfo(visualLineToConsider, fullVisualLinesOccupiedByLogicalLine, col % width);
         }
 
-        return vector;
     }
 }
