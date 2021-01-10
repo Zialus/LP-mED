@@ -13,14 +13,14 @@ import java.util.List;
 
 @Log
 public class BufferView {
-    private Terminal term;
+    private final Terminal term;
     private FileBuffer fbuffer;                                   // FileBuffer associado ao terminal neste momento
     private int currentBuffer;                                    // Indice do Buffer que está a ser editado neste momento
     // Altura e largura da janela com o terminal
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private List<FileBuffer> bufferList = new ArrayList<>(); // Lista com os varios Buffers
-    private List<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
+    private final List<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
     // Linha e coluna visual do cursor
     private int cursorLine;
     private int cursorColumn;
@@ -322,9 +322,6 @@ public class BufferView {
 
         StringBuilder linha = fbuffer.getNthLine(line);
 
-        TerminalSize tamanhoterminal = term.getTerminalSize();
-        width = tamanhoterminal.getColumns();
-
         term.setCursorPosition(0,initRow);
 
         int linhaSize = linha.length();
@@ -353,10 +350,6 @@ public class BufferView {
             term.putCharacter(linha.charAt(i));
 
         }
-
-
-
-
 
     }
 

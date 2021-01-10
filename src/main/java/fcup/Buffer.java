@@ -8,7 +8,7 @@ import java.util.List;
 @Log
 public class Buffer {
 
-    private ArrayList<StringBuilder> lineList = new ArrayList<>();
+    private final ArrayList<StringBuilder> lineList = new ArrayList<>();
     private Cursor currentCursor = new Cursor (0,0);
     // inicio de marcação para clipboard
     private int beginMarkRow;

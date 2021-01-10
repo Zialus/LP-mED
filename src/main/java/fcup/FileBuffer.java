@@ -12,7 +12,7 @@ import java.util.Deque;
 
 @Log
 public class FileBuffer extends Buffer {
-    private Path savePath;
+    private final Path savePath;
     private boolean modified;
     private Deque<Command> commandList = new ArrayDeque<>();
     private int startRow;                   					// Primeira linha logica que aparece na janela
