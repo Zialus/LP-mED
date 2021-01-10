@@ -20,7 +20,7 @@ public class Testar {
         try {
             temp = File.createTempFile("temp-file-name", ".tmp");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe(e.toString());
             return;
         }
         log.info("Temp file: " + temp.getAbsolutePath());
@@ -39,14 +39,14 @@ public class Testar {
         try {
             buff = new BufferView(lista);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe(e.toString());
             return;
         }
 
         try {
             buff.startTerm();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe(e.toString());
         }
     }
 

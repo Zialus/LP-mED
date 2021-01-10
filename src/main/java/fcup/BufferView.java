@@ -271,7 +271,7 @@ public class BufferView {
             }
             catch (InterruptedException ie)
             {
-                ie.printStackTrace();
+                log.severe(ie.toString());
                 Thread.currentThread().interrupt();
             }
         }

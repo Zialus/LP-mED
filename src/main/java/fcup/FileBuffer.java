@@ -48,7 +48,7 @@ public class FileBuffer extends Buffer {
                 brw.write("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe(e.toString());
         }
 
     }
@@ -71,7 +71,7 @@ public class FileBuffer extends Buffer {
 
             modified = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe(e.toString());
         }
 
     }
