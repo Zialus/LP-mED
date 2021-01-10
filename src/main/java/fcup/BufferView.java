@@ -23,7 +23,7 @@ public class BufferView {
     private List<Integer> modifiedLines = new ArrayList<>(); // Lista com as linhas alteradas
     // Linha e coluna visual do cursor
     private int cursorLine;
-    private int cursorRow;
+    private int cursorColumn;
 
 
     // Constuir um BufferView só com um buffer
@@ -300,27 +300,25 @@ public class BufferView {
 
         log.finest("posicoes logicas do cursor: " + cursorL + "," + cursorC);
 
-        int[] pos = viewPos(cursorL,cursorC);
-        int line = pos[0];
-        int row = pos[2];
-        cursorRow = row;
-        cursorLine = line;
+        VisualPositionInfo visualPositionInfo = viewPos(cursorL,cursorC);
+        cursorLine = visualPositionInfo.getStartingLine();
+        cursorColumn = visualPositionInfo.getLastColumn();
 
-        log.finest("posicoes visuais do cursor: " + cursorLine + "," + cursorRow);
-        term.setCursorPosition(cursorRow,cursorLine);
+        log.finest("posicoes visuais do cursor: " + cursorLine + "," + cursorColumn);
+        term.setCursorPosition(cursorColumn,cursorLine);
 
         fbuffer.setModified(false);
     }
 
     private void drawN(int line) throws IOException {
-        int[] tmp = viewPos(line,0);
-        int initRow = tmp[0];
+        VisualPositionInfo visualPositionInfo = viewPos(line,0);
+        int initRow = visualPositionInfo.getStartingLine();
 
         if (initRow == -20){
             return;
         }
 
-        int nLines = tmp[1];
+        int nLines = visualPositionInfo.getNumberOfLines();
 
         StringBuilder linha = fbuffer.getNthLine(line);
 
@@ -362,8 +360,7 @@ public class BufferView {
 
     }
 
-    private int[] viewPos(int line, int col){
-        int[] vector = new int[3] ;
+    private VisualPositionInfo viewPos(int line, int col){
         int row = fbuffer.getStartRow(); // Linha logica inicial a considerar
         int vis = 0;                // Linha visual inicial a considerar
         int r;                      // Quantidade de caracteres na ultima linha
@@ -387,42 +384,37 @@ public class BufferView {
         r = tamanho%width;
         q = tamanho/width ;
 
+        log.finest("line " + line + " v: " + vis + " r: " + r + " q " + q);
+
         if(vis==height-1){
             fbuffer.setLastRow(line);
         }
 
+        VisualPositionInfo vector;
+
         if (vis==height){
-            vector[0] = -20;
+            vector = new VisualPositionInfo(-20, 0, 0);
             return vector;
         }
 
-
-        log.finest("line " + line + " v: " + vis + " r: " + r + " q " + q);
-        vector[0] = vis; // posicao que a linha logica vai ter na janela
-        vector[1] = q; // quantas linhas essa linha logica vai ocupar na janela
-
         if(col==0){
-            vector[2] = col;
+            vector = new VisualPositionInfo(vis, q, col);
         }
 
         else if(col==width){
-            vector[2] = col%width; // quantos caracteres sobram (not really)
-            vector[0] = vis+col/width;
+            vector = new VisualPositionInfo(vis+col/width, q, col%width);
         }
 
         else if(col%width==0){
-            vector[2] = 0;
-            vector[0] = vis+(col/width);
+            vector = new VisualPositionInfo(vis+(col/width), q, 0);
         }
 
         else if(col>width){
-            vector[2] = col%width ; // quantos caracteres sobram (not really)
-            vector[0] = vis+col/width;
+            vector = new VisualPositionInfo(vis+col/width, q, col%width);
         }
 
-        else if(col<width){
-            vector[2] = col%width; // quantos caracteres sobram
-            vector[0] = vis;
+        else { // col<width
+            vector = new VisualPositionInfo(vis, q, col%width);
         }
 
         return vector;
