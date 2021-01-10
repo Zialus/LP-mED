@@ -75,7 +75,7 @@ public class Buffer {
     }
 
     public void paste(){
-        String[] stringsToInsert = clipboard.toString().split("\n");
+        String[] stringsToInsert = clipboard.toString().split("\n",-1);
 
         if (stringsToInsert.length == 0){
             insertStr(stringsToInsert[0]);
