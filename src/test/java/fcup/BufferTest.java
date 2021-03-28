@@ -1,11 +1,19 @@
 package fcup;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.LogManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BufferTest {
+
+    @BeforeEach
+    void setUp() {
+        LogManager.getLogManager().reset();
+    }
 
     @Test
     void testNewEmptyBuffer() {
@@ -123,6 +131,18 @@ class BufferTest {
         b.movePrev();
         assertEquals(0, b.getCursor().getL());
         assertEquals(0, b.getCursor().getC());
+    }
+
+    @Test
+    void testMoveCursorToInvalidPosition() {
+        Buffer b = new Buffer("123456789abcdef");
+
+        assertEquals(b.getCursor(), new Cursor(0,0));
+
+        Cursor c1 = new Cursor(10, 99);
+        b.setCursor(c1);
+
+        assertEquals(b.getCursor(), new Cursor(0,0));
     }
 
     @Test
