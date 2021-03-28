@@ -25,6 +25,12 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
+      - name: Gradle/Java version Info
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: -v
+          gradle-version: current
+
       - name: Gradle Build
         uses: eskatos/gradle-command-action@v1
         with:
