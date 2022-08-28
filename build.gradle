@@ -45,6 +45,7 @@ tasks.withType(JavaCompile) {
     options.errorprone {
         option("NullAway:AnnotatedPackages", "fcup")
     }
+    options.compilerArgs += ['-Xlint:all']
 }
 
 test {
