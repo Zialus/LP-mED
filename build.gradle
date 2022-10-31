@@ -41,7 +41,8 @@ dependencies {
 }
 
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone.enabled = false
     options.errorprone {
         option("NullAway:AnnotatedPackages", "fcup")
     }
