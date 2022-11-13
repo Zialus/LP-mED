@@ -5,7 +5,7 @@ plugins {
     id "net.ltgt.errorprone" version "3.0.1"
     id "com.github.spotbugs" version "5.0.13"
     id "pmd"
-//    id 'checkstyle'
+    id 'checkstyle'
     id "java"
     id "idea"
     id 'jacoco'
@@ -119,12 +119,32 @@ spotbugs {
 
 spotbugsMain {
     reports {
+        xml { required = false }
+        html { required = true }
+    }
+}
+
+spotbugsTest {
+    reports {
+        xml { required = false }
+        html { required = true }
+    }
+}
+
+checkstyle {
+    toolVersion = '10.4'
+    showViolations = false
+    ignoreFailures = true
+}
+
+checkstyleMain {
+    reports {
         xml.required = false
         html.required = true
     }
 }
 
-spotbugsTest {
+checkstyleTest {
     reports {
         xml.required = false
         html.required = true
