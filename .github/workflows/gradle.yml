@@ -33,19 +33,19 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: -v
-          gradle-version: current
+          gradle-version: release-candidate
 
       - name: Gradle Build
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
-          gradle-version: current
+          gradle-version: release-candidate
 
       - name: Gradle Test
         uses: gradle/gradle-build-action@v2
         with:
           arguments: pitest
-          gradle-version: current
+          gradle-version: release-candidate
 
   sonar:
     name: Sonarcloud
