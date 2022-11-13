@@ -24,6 +24,9 @@ sonarqube {
 group 'fcup'
 version '1.0-SNAPSHOT'
 
+Boolean enableErrorProne = System.properties['enableErrorProne']
+println "[IMPORTANT INFORMATION] ErrorProne is ${enableErrorProne ? 'enabled' : 'disabled'}"
+
 repositories {
     mavenCentral()
 }
@@ -42,7 +45,7 @@ dependencies {
 
 
 tasks.withType(JavaCompile).configureEach {
-    options.errorprone.enabled = false
+    options.errorprone.enabled = enableErrorProne ?: false
     options.errorprone {
         option("NullAway:AnnotatedPackages", "fcup")
     }
