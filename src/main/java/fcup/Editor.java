@@ -1,17 +1,19 @@
 package fcup;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import lombok.extern.java.Log;
 
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Log
 public class Editor {
 
     public static void main(String[] args) throws IOException {
-
-        ArrayList<FileBuffer> lista = new ArrayList<>();  // Lista de Buffers
-
-        if (args.length ==0){
+        if (args.length == 0) {
             System.out.println("Pode-se correr o programa com um ficheiro");
             System.out.println("java -jar <caminho/para/o_ficheiro.jar> <caminho/para/o_ficheiro.txt>");
             System.out.println("ou varios");
@@ -20,20 +22,20 @@ public class Editor {
             System.exit(0);
         }
 
+        FileSystem defaultFileSystem = FileSystems.getDefault();
 
-        for (String arg : args) {
-            Path path = FileSystems.getDefault().getPath(arg);
-            FileBuffer fb = new FileBuffer(path);
+        List<FileBuffer> fileBufferList = Arrays.stream(args)
+                .map(defaultFileSystem::getPath)
+                .map(path -> {
+                    fcup.FileBuffer fb = new fcup.FileBuffer(path);
+                    fb.open(path);
+                    return fb;
+                })
+                .collect(Collectors.toList());
 
-            fb.open(path);
+        log.info(fileBufferList.toString());
 
-            lista.add(fb);
-        }
-
-        System.out.println(lista.toString());
-        BufferView buff = new BufferView(lista);
-
+        BufferView buff = new BufferView(fileBufferList);
         buff.startTerm();
-
     }
 }

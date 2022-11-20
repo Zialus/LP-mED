@@ -1,5 +1,6 @@
 package fcup;
 
+import lombok.ToString;
 import lombok.extern.java.Log;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 @Log
+@ToString
 public class FileBuffer extends Buffer {
     private final Path savePath;
     private boolean modified;
