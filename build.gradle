@@ -1,5 +1,5 @@
 plugins {
-    id 'info.solidsoft.pitest' version '1.9.0'
+    id 'info.solidsoft.pitest' version '1.9.11'
     id "se.patrikerdes.use-latest-versions" version "0.2.18"
     id "com.github.ben-manes.versions" version "0.44.0"
     id "net.ltgt.errorprone" version "3.0.1"
@@ -10,7 +10,7 @@ plugins {
     id "idea"
     id 'jacoco'
     id "org.sonarqube" version "3.5.0.2730"
-    id "io.freefair.lombok" version "6.6-rc1"
+    id "io.freefair.lombok" version "6.6"
 }
 
 sonarqube {
@@ -94,7 +94,7 @@ pmdTest {
 
 pitest {
     junit5PluginVersion = '1.1.0'
-    pitestVersion = '1.9.10'
+    pitestVersion = '1.10.0'
     mutators = ["ALL"]
 }
 
@@ -122,20 +122,20 @@ spotbugs {
 
 spotbugsMain {
     reports {
-        xml { required = false }
-        html { required = true }
+        xml.required = false
+        html.required = true
     }
 }
 
 spotbugsTest {
     reports {
-        xml { required = false }
-        html { required = true }
+        xml.required = false
+        html.required = true
     }
 }
 
 checkstyle {
-    toolVersion = '10.4'
+    toolVersion = '10.5.0'
     showViolations = false
     ignoreFailures = true
 }
