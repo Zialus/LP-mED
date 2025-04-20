@@ -44,7 +44,6 @@ dependencies {
     errorprone 'com.google.errorprone:error_prone_core:2.38.0'
 }
 
-
 tasks.withType(JavaCompile).configureEach {
     options.errorprone.enabled = enableErrorProne ?: false
     options.errorprone {
@@ -95,7 +94,7 @@ pmdTest {
 
 pitest {
     junit5PluginVersion = '1.2.1'
-    pitestVersion = '1.16.1'
+    pitestVersion = '1.19.1'
     mutators = ["ALL"]
 }
 
