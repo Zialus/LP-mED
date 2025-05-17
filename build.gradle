@@ -21,8 +21,8 @@ sonarqube {
     }
 }
 
-group 'fcup'
-version '1.0-SNAPSHOT'
+group = 'fcup'
+version = '1.0-SNAPSHOT'
 
 Boolean enableErrorProne = System.properties['enableErrorProne']
 println "[IMPORTANT INFORMATION] ErrorProne is ${enableErrorProne ? 'enabled' : 'disabled'}"
@@ -101,7 +101,7 @@ pitest {
 }
 
 jacoco {
-    toolVersion = "0.8.13"
+    toolVersion = '0.8.13'
 }
 
 jacocoTestReport {
