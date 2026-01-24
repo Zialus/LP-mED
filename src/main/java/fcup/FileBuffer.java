@@ -45,7 +45,7 @@ public class FileBuffer extends Buffer {
 
             for (int i = 0; i < numLines; i++) {
                 StringBuilder sb = getNthLine(i);
-                log.info("linha " + i + ": "+ sb.toString());
+                log.info("linha " + i + ": "+ sb);
                 brw.write(sb.toString());
                 brw.write("\n");
             }

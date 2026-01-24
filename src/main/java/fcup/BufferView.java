@@ -44,7 +44,7 @@ public class BufferView {
         width = sizeTerm.getColumns();
         height = sizeTerm.getRows();
         this.bufferList = bufferList;
-        this.fbuffer = bufferList.get(0); 			// Usar o primeiro buffer da lista de buffers como "default"
+        this.fbuffer = bufferList.getFirst(); 			// Usar o primeiro buffer da lista de buffers como "default"
     }
 
     private void refreshAfterLine(int line) {

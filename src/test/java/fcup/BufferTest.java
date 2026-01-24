@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.logging.LogManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class BufferTest {
+final class BufferTest {
 
     @BeforeEach
     void setUp() {
@@ -16,7 +17,7 @@ class BufferTest {
     }
 
     @Test
-    void testNewEmptyBuffer() {
+    void newEmptyBuffer() {
 
         Buffer b = new Buffer();
         assertEquals( 1, b.getNumLines());
@@ -25,7 +26,7 @@ class BufferTest {
     }
 
     @Test
-    void testSetCursorToValidPosition(){
+    void setCursorToValidPosition(){
 
         Buffer b = new Buffer("xalala");
         b.setCursor(new Cursor(0,3));
@@ -34,7 +35,7 @@ class BufferTest {
     }
 
     @Test
-    void testInsertChar() {
+    void insertChar() {
 
         Buffer b = new Buffer("123456789abcdef");
         Cursor c1 = new Cursor(0,5);
@@ -72,23 +73,23 @@ class BufferTest {
     }
 
     @Test
-    void testEmptyBuffer() {
+    void emptyBuffer() {
         Buffer b = new Buffer();
         assertEquals("", b.getNthLine(0).toString());
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(1));
+        assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(1));
 
     }
 
     @Test
-    void testComplexBuffer() {
+    void complexBuffer() {
         Buffer b = new Buffer("123456789abcdef");
         assertEquals("123456789abcdef", b.getNthLine(0).toString());
         assertEquals("", b.getNthLine(1).toString());
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
+        assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
     }
 
     @Test
-    void testMovePrev() {
+    void movePrev() {
         Buffer b = new Buffer("123456789abcdef");
 
         Cursor c1 = new Cursor(0, 2);
@@ -134,7 +135,7 @@ class BufferTest {
     }
 
     @Test
-    void testMoveCursorToInvalidPosition() {
+    void moveCursorToInvalidPosition() {
         Buffer b = new Buffer("123456789abcdef");
 
         assertEquals(b.getCursor(), new Cursor(0,0));
@@ -146,7 +147,7 @@ class BufferTest {
     }
 
     @Test
-    void testMoveNext() {
+    void moveNext() {
         Buffer b = new Buffer("123456789abcdef");
 
         Cursor c1 = new Cursor(0, 13);
@@ -196,7 +197,7 @@ class BufferTest {
     }
 
     @Test
-    void test_delete_char() {
+    void deleteChar() {
         Buffer b = new Buffer("123456789abcdef");
         Cursor cursor1 = new Cursor(0, 11);
         b.setCursor(cursor1);
@@ -252,7 +253,7 @@ class BufferTest {
         assertEquals("123456789ab", b.getNthLine(0).toString());
         assertEquals("", b.getNthLine(1).toString());
 
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
+        assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
 
         assertEquals(0, b.getCursor().getL());
         assertEquals(11, b.getCursor().getC());
@@ -261,7 +262,7 @@ class BufferTest {
         assertEquals("123456789a", b.getNthLine(0).toString());
         assertEquals("", b.getNthLine(1).toString());
 
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
+        assertThrows(IndexOutOfBoundsException.class, () -> b.getNthLine(2));
 
         assertEquals(0, b.getCursor().getL());
         assertEquals(10, b.getCursor().getC());
