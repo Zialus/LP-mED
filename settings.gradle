@@ -1,2 +1,8 @@
 rootProject.name = 'mED'
 
+includeBuild('third-party/codspeed-jvm/jmh-fork') {
+    dependencySubstitution {
+        substitute module('org.openjdk.jmh:jmh-core') using project(':jmh-core')
+        substitute module('org.openjdk.jmh:jmh-generator-annprocess') using project(':jmh-generator-annprocess')
+    }
+}
