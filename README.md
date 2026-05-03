@@ -1,6 +1,7 @@
 # Med: um mini editor de texto
 
 [![Build Status](https://github.com/Zialus/LP-mED/actions/workflows/gradle.yml/badge.svg)](https://github.com/Zialus/LP-mED/actions/workflows/gradle.yml)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/Zialus/LP-mED?utm_source=badge)
 
 ## Trabalho 2 - Laboratórios de Programação (MIERSI-FCUP).
 
