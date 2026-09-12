@@ -9,6 +9,13 @@ on:
   schedule:
     - cron: '20 17 * * *'  # Sets Semgrep to scan every day at 17:20 UTC.
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read  # Required to scan repository contents.
+
 jobs:
   semgrep:
     name: semgrep/ci
@@ -18,8 +25,10 @@ jobs:
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
-      image: semgrep/semgrep:1.173.0
+      image: semgrep/semgrep:1.173.0@sha256:67319956da3dcb58baf5b322899c15458e3963e7018a86aeeb5cd224e69cb77a
     if: (github.actor != 'dependabot[bot]')
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
       - run: semgrep ci
