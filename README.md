@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/Zialus/LP-mED/actions/workflows/gradle.yml/badge.svg)](https://github.com/Zialus/LP-mED/actions/workflows/gradle.yml)
 
-## Trabalho 2 - Laboratórios de Programação (MIERSI-FCUP).
+## Trabalho 2 - Laboratórios de Programação (MIERSI-FCUP)
 
 ### Utilização
 
@@ -24,4 +24,3 @@ java -jar <caminho/para/o_executavel.jar> <caminho/para/o_ficheiro1.txt> <caminh
 - **Alt + B:** Ir para o buffer anterior.
 - **Ctrl + Z:** Undo
 - **Ctrl + S:** Save
-
