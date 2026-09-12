@@ -1,0 +1,46 @@
+
+name: 🔍 GHA Linter
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  security-events: write
+  actions: read
+
+jobs:
+  lint:
+    name: Validate GitHub Actions and YAML
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: 🔎 Run actionlint
+        uses: reviewdog/action-actionlint@d290e336d5a743810aef4404f757dc862276d2ae  # v1.73.4
+        with:
+          reporter: github-pr-review
+
+      - name: 🧪 Run yamllint
+        uses: reviewdog/action-yamllint@de68272fdca5f2a961fb309e0d2e13c2eb186d9e  # v1.23.1
+        with:
+          reporter: github-pr-review
+          yamllint_flags: .github
+
+      - name: 📝 Run markdownlint
+        uses: reviewdog/action-markdownlint@35165bd1319a53e25f413032556f5f1fbfe6cb63  # v0.29.1
+        with:
+          reporter: github-pr-review
+          markdownlint_flags: "**/*.md"
+
+      - name: 🛡️ Run zizmor
+        uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482  # v0.6.4
