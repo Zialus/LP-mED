@@ -1,22 +1,22 @@
 name: Coverity Scan
 
-permissions:
-  contents: read
-
 on:
   schedule:
     - cron: '0 0 * * *'  # Every day at 00:00 UTC
-
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   daily_scan:
     name: Daily Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -34,29 +34,13 @@ jobs:
         with:
           gradle-version: "9.7.1"
 
-      - name: Download Coverity Build Tool
-        env:
-          TOKEN: ${{ secrets.COVERITY_TOKEN }}
-        run: |
-          wget -q https://scan.coverity.com/download/java/linux64 \
-            --post-data "token=$TOKEN&project=Zialus%2FLP-mED" -O cov-analysis-linux64.tar.gz
-          mkdir cov-analysis-linux64
-          tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
-
-      - name: Build with cov-build
-        run: |
-          export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
-          cov-build --dir cov-int gradle build --no-daemon
-
-      - name: Submit the result to Coverity Scan
-        run: |
-          tar czvf snake.tgz cov-int
-          curl \
-          --form token=$TOKEN \
-          --form email=raulmendesferreira@gmail.com \
-          --form file=@snake.tgz \
-          --form version="trunk" \
-          --form description="LP-mED" \
-          https://scan.coverity.com/builds?project=Zialus%2FLP-mED
-        env:
-          TOKEN: ${{ secrets.COVERITY_TOKEN }}
+      - name: Run Coverity Scan
+        uses: vapier/coverity-scan-action@8fe7b0af23cbbd4eced5f63dcd2384640eaa5d49  # v1.10.0
+        with:
+          project: Zialus/LP-mED
+          token: ${{ secrets.COVERITY_TOKEN }}
+          email: raulmendesferreira@gmail.com
+          build_language: java
+          command: gradle build --no-daemon
+          version: trunk
+          description: LP-mED
